@@ -11,7 +11,11 @@ const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
 router.get('/', (req, res) => {
-  userController.getUsers(req, res);
+  userController.find(req, res);
+});
+
+router.post('/', (req, res) => {
+  userController.create(req, res);
 });
 
 export default router;

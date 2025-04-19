@@ -1,4 +1,4 @@
-export interface FindUserDTO {
+export interface FindUserOutput {
   id: string;
   email: string;
   created_at: Date;
