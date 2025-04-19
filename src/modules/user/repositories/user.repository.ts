@@ -9,8 +9,15 @@ export interface UserRepository {
 
 export class PrismaUserRepository implements UserRepository {
   public async find(): Promise<FindUserOutput[] | null> {
+    const select = {
+      id: true,
+      email: true,
+      created_at: true,
+      updated_at: true,
+    };
+
     return prisma.user.findMany({
-      select: { id: true, email: true, created_at: true, updated_at: true },
+      select,
     });
   }
 

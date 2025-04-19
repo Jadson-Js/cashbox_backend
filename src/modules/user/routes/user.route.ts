@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
   userController.find(req, res);
 });
 
-router.post('/', (req, res) => {
+router.post('/signup', (req, res) => {
   userController.create(req, res);
 });
 
