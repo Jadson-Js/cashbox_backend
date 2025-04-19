@@ -1,10 +1,17 @@
 import { prisma } from '../../../shared/prisma/client';
 import { CreateUserInput, CreateUserOutput } from '../dtos/create-user.dto';
 import { FindUserOutput } from '../dtos/find-user.dto';
+import {
+  FindByEmailUserInput,
+  FindByEmailUserOutput,
+} from '../dtos/findByEmail-user.dto';
 
 export interface UserRepository {
-  create(params: CreateUserInput): Promise<CreateUserOutput>;
   find(): Promise<FindUserOutput[] | null>;
+  findByEmail(
+    params: FindByEmailUserInput,
+  ): Promise<FindByEmailUserOutput | null>;
+  create(params: CreateUserInput): Promise<CreateUserOutput>;
 }
 
 export class PrismaUserRepository implements UserRepository {
@@ -17,6 +24,23 @@ export class PrismaUserRepository implements UserRepository {
     };
 
     return prisma.user.findMany({
+      select,
+    });
+  }
+
+  public async findByEmail(
+    params: FindByEmailUserInput,
+  ): Promise<FindByEmailUserOutput | null> {
+    const select = {
+      id: true,
+      email: true,
+      password: true,
+      created_at: true,
+      updated_at: true,
+    };
+
+    return prisma.user.findFirst({
+      where: { email: params.email },
       select,
     });
   }

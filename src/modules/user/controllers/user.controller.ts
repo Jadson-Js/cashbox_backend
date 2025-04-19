@@ -15,7 +15,7 @@ export class UserController {
     }
   }
 
-  public async create(req: Request, res: Response): Promise<Response> {
+  public async signup(req: Request, res: Response): Promise<Response> {
     try {
       const { email, password } = req.body;
 
@@ -24,8 +24,28 @@ export class UserController {
         password,
       };
 
-      const user = await this.userService.create(data);
-      return res.status(201).json(user);
+      const user = await this.userService.signup(data);
+
+      return res.status(201).json({ user });
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An unknown error occurred';
+      return res.status(400).json({ error: errorMessage });
+    }
+  }
+
+  public async login(req: Request, res: Response): Promise<Response> {
+    try {
+      const { email, password } = req.body;
+
+      const data = {
+        email,
+        password,
+      };
+
+      const user = await this.userService.login(data);
+
+      return res.status(201).json({ user });
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'An unknown error occurred';
