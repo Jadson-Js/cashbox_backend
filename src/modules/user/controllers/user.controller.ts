@@ -52,4 +52,15 @@ export class UserController {
       return res.status(400).json({ error: errorMessage });
     }
   }
+
+  public async delete(req: Request, res: Response): Promise<Response> {
+    try {
+      await this.userService.delete();
+      return res.status(204).send();
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An unknown error occurred';
+      return res.status(400).json({ error: errorMessage });
+    }
+  }
 }

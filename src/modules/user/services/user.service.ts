@@ -49,4 +49,8 @@ export class UserService {
       refreshToken: generateRefreshToken(user.id),
     };
   }
+
+  public async delete(): Promise<void> {
+    await this.userRepository.delete();
+  }
 }

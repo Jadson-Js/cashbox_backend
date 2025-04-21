@@ -7,23 +7,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TransactionType {
+  income
+  expense
+}
+
 model User {
-  id         String   @id @default(uuid()) @db.VarChar(36)
-  email      String   @unique(map: "email_UNIQUE") @db.VarChar(150)
-  password   String   @db.VarChar(255)
-  created_at DateTime @default(now()) @db.Timestamp(0)
-  updated_at DateTime @default(now()) @db.Timestamp(0)
+  id               String     @id @default(uuid()) @db.VarChar(36)
+  email            String     @unique(map: "email_UNIQUE") @db.VarChar(150)
+  password         String     @db.VarChar(255)
+  created_at       DateTime   @default(now())
+  updated_at       DateTime   @updatedAt
 
   @@map("users")
 }
 
-model Product {
-  id        String   @id @db.VarChar(255)
-  name      String   @db.VarChar(255)
-  price     Float    @db.Float
-  quantity  Int      @default(0)
-  created_at DateTime @default(now()) @db.Timestamp(0)
-  updated_at DateTime @default(now()) @db.Timestamp(0)
+model Transaction {
+  id               String      @id @default(uuid()) @db.VarChar(36)
+  user_id          String
+  amount           Float
+  type             TransactionType
+  category         String   
+  description      String?
+  transaction_date DateTime
+  created_at       DateTime   @default(now())
+  updated_at       DateTime   @updatedAt
 
-  @@map("products")
+
+  categoryRel      Category   @relation(fields: [category], references: [id])
+}
+
+
+model Category {
+  id          String        @id @default(uuid()) @db.VarChar(36)
+  icon_url    String?
+  title       String
+  description String?
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+
+
+  transactions Transaction[]
 }

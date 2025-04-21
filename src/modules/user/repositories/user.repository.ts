@@ -12,6 +12,7 @@ export interface UserRepository {
     params: FindByEmailUserInput,
   ): Promise<FindByEmailUserOutput | null>;
   create(params: CreateUserInput): Promise<CreateUserOutput>;
+  delete(): Promise<void>;
 }
 
 export class PrismaUserRepository implements UserRepository {
@@ -50,5 +51,9 @@ export class PrismaUserRepository implements UserRepository {
     const user = await prisma.user.create({ data: { email, password } });
 
     return { id: user.id, email: user.email };
+  }
+
+  public async delete(): Promise<void> {
+    await prisma.user.deleteMany();
   }
 }
