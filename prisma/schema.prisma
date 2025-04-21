@@ -7,10 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum TransactionType {
-  income
-  expense
-}
 
 model User {
   id               String     @id @default(uuid()) @db.VarChar(36)
@@ -26,7 +22,7 @@ model Transaction {
   id               String      @id @default(uuid()) @db.VarChar(36)
   user_id          String
   amount           Float
-  type             TransactionType
+  type             String
   category         String   
   description      String?
   transaction_date DateTime
