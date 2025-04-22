@@ -1,11 +1,12 @@
-export interface Transaction {
-  id: string;
+export interface CreateTransactionInput {
   user_id: string;
   amount: number;
   type: string;
   category_id: string;
   description?: string;
   transaction_date: Date;
-  created_at: Date;
-  updated_at: Date;
+}
+
+export interface CreateTransactionOutput {
+  id: string;
 }

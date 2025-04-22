@@ -3,6 +3,6 @@ export interface FindTransactionOutput {
   user_id: string;
   amount: number;
   type: string;
-  category: string;
+  category_id: string;
   transaction_date: Date;
 }
