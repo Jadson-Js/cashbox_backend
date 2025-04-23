@@ -5,7 +5,6 @@ import { PrismaUserRepository } from '../repositories/user.repository';
 
 const router = Router();
 
-// Injeção manual das dependências (simples)
 const userRepository = new PrismaUserRepository();
 const userService = new UserService(userRepository);
 const userController = new UserController(userService);

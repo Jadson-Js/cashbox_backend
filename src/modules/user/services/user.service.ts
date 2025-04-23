@@ -16,18 +16,24 @@ export class UserService {
     return users;
   }
 
-  public async signup(params: CreateUserInput): Promise<CreateUserOutput> {
-    const passwordEncrypted = await hashPassword(params.password);
-    const data = { email: params.email, password: passwordEncrypted };
+  public async signup({
+    email,
+    password,
+  }: CreateUserInput): Promise<CreateUserOutput> {
+    const passwordEncrypted = await hashPassword(password);
+    const credentials = { email: email, password: passwordEncrypted };
 
-    const user = await this.userRepository.create(data);
+    try {
+      const user = await this.userRepository.create(credentials);
+      const response = {
+        id: user.id,
+        email: user.email,
+      };
 
-    const response = {
-      id: user.id,
-      email: user.email,
-    };
-
-    return response;
+      return response;
+    } catch (error) {
+      throw new Error('Error creating user');
+    }
   }
 
   public async login(params: LoginUserInput): Promise<LoginUserOutput | null> {

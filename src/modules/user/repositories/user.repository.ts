@@ -5,14 +5,9 @@ import {
   FindByEmailUserInput,
   FindByEmailUserOutput,
 } from '../dtos/findByEmail-user.dto';
-import {
-  FindByIdUserInput,
-  FindByIdUserOutput,
-} from '../dtos/findById-user.dto';
 
 export interface UserRepository {
   find(): Promise<FindUserOutput[] | null>;
-  findById(params: FindByIdUserInput): Promise<FindByIdUserOutput | null>;
   findByEmail(
     params: FindByEmailUserInput,
   ): Promise<FindByEmailUserOutput | null>;
@@ -30,21 +25,6 @@ export class PrismaUserRepository implements UserRepository {
     };
 
     return prisma.user.findMany({
-      select,
-    });
-  }
-
-  findById(params: FindByIdUserInput): Promise<FindByIdUserOutput | null> {
-    const select = {
-      id: true,
-      email: true,
-      password: true,
-      created_at: true,
-      updated_at: true,
-    };
-
-    return prisma.user.findFirst({
-      where: { id: params.id },
       select,
     });
   }

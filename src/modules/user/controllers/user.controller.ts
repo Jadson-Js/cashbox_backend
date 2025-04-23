@@ -17,16 +17,14 @@ export class UserController {
 
   public async signup(req: Request, res: Response): Promise<Response> {
     try {
-      const { email, password } = req.body;
-
       const data = {
-        email,
-        password,
+        email: req.body.email,
+        password: req.body.password,
       };
 
-      const user = await this.userService.signup(data);
+      const response = await this.userService.signup(data);
 
-      return res.status(201).json({ user });
+      return res.status(201).json({ response });
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'An unknown error occurred';
@@ -36,16 +34,14 @@ export class UserController {
 
   public async login(req: Request, res: Response): Promise<Response> {
     try {
-      const { email, password } = req.body;
-
       const data = {
-        email,
-        password,
+        email: req.body.email,
+        password: req.body.password,
       };
 
-      const user = await this.userService.login(data);
+      const response = await this.userService.login(data);
 
-      return res.status(201).json({ user });
+      return res.status(201).json({ response });
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'An unknown error occurred';
