@@ -1,12 +1,20 @@
 import { Request, Response } from 'express';
-import { UserService } from '../services/user.service';
+import { FindUserService } from '../services/find-user.service';
+import { SignupUserService } from '../services/signup-user.service';
+import { LoginUserService } from '../services/login-user.service';
+import { DeleteUserService } from '../services/delete-user.service';
 
 export class UserController {
-  public constructor(private userService: UserService) {}
+  public constructor(
+    private readonly findUserService: FindUserService,
+    private readonly signupUserService: SignupUserService,
+    private readonly loginUserService: LoginUserService,
+    private readonly deleteUserService: DeleteUserService,
+  ) {}
 
   public async find(req: Request, res: Response): Promise<Response> {
     try {
-      const response = await this.userService.find();
+      const response = await this.findUserService.execute();
       return res.status(200).json(response);
     } catch (err: unknown) {
       const errorMessage =
@@ -22,7 +30,7 @@ export class UserController {
         password: req.body.password,
       };
 
-      const response = await this.userService.signup(data);
+      const response = await this.signupUserService.execute(data);
 
       return res.status(201).json({ response });
     } catch (err: unknown) {
@@ -39,7 +47,7 @@ export class UserController {
         password: req.body.password,
       };
 
-      const response = await this.userService.login(data);
+      const response = await this.loginUserService.execute(data);
 
       return res.status(201).json({ response });
     } catch (err: unknown) {
@@ -51,7 +59,7 @@ export class UserController {
 
   public async delete(req: Request, res: Response): Promise<Response> {
     try {
-      await this.userService.delete();
+      await this.deleteUserService.execute();
       return res.status(204).send();
     } catch (err: unknown) {
       const errorMessage =

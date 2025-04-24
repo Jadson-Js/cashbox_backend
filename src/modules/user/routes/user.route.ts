@@ -1,13 +1,9 @@
 import { Router } from 'express';
-import { UserController } from '../controllers/user.controller';
-import { UserService } from '../services/user.service';
-import { PrismaUserRepository } from '../repositories/user.repository';
+import { makeUserController } from '../factories/makeUserController';
 
 const router = Router();
 
-const userRepository = new PrismaUserRepository();
-const userService = new UserService(userRepository);
-const userController = new UserController(userService);
+const userController = makeUserController();
 
 router.get('/', (req, res) => {
   userController.find(req, res);
