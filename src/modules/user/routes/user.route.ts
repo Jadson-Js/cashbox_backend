@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { makeUserController } from '../factories/makeUserController';
+import { signupSchema } from '../../../shared/middlewares/schemas';
+import { validate } from '../../../shared/middlewares/validate';
 
 const router = Router();
 
@@ -9,7 +11,7 @@ router.get('/', (req, res) => {
   userController.find(req, res);
 });
 
-router.post('/signup', (req, res) => {
+router.post('/signup', validate(signupSchema), (req, res) => {
   userController.signup(req, res);
 });
 
