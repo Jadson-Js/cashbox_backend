@@ -1,7 +1,10 @@
 import { Router } from 'express';
 import { makeUserController } from '../factories/makeUserController';
-import { signupSchema } from '../../../shared/middlewares/schemas';
-import { validate } from '../../../shared/middlewares/validate';
+import {
+  signupSchema,
+  loginSchema,
+} from '../../../shared/middlewares/schemas-zod';
+import { validate } from '../../../shared/middlewares/validate-zod';
 
 const router = Router();
 
@@ -15,7 +18,7 @@ router.post('/signup', validate(signupSchema), (req, res) => {
   userController.signup(req, res);
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', validate(loginSchema), (req, res) => {
   userController.login(req, res);
 });
 
