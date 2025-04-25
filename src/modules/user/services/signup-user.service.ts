@@ -3,7 +3,7 @@ import { CreateUserInput, CreateUserOutput } from '../dtos/create-user.dto';
 import { hashPassword } from '../../../shared/utils/bcrypt';
 
 export class SignupUserService {
-  public constructor(private userRepository: UserRepository) {}
+  public constructor(private readonly userRepository: UserRepository) {}
 
   public async execute({
     email,
@@ -12,16 +12,12 @@ export class SignupUserService {
     const passwordEncrypted = await hashPassword(password);
     const credentials = { email: email, password: passwordEncrypted };
 
-    try {
-      const user = await this.userRepository.create(credentials);
-      const response = {
-        id: user.id,
-        email: user.email,
-      };
+    const user = await this.userRepository.create(credentials);
+    const response = {
+      id: user.id,
+      email: user.email,
+    };
 
-      return response;
-    } catch (error) {
-      throw new Error('Error creating user');
-    }
+    return response;
   }
 }
