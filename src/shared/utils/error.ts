@@ -26,7 +26,7 @@ export class Result<T, E> {
 }
 
 export class AppError extends Error {
-  constructor(
+  protected constructor(
     public readonly message: string,
     public readonly statusCode: number = 400,
   ) {
@@ -36,13 +36,13 @@ export class AppError extends Error {
 }
 
 export class NotFoundError extends AppError {
-  constructor(message: string) {
+  public constructor(message: string) {
     super(message, 404);
   }
 }
 
 export class UnauthorizedError extends AppError {
-  constructor() {
+  public constructor() {
     super('Unauthorized', 401);
   }
 }

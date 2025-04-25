@@ -45,15 +45,20 @@ export class UserController {
       email: req.body.email,
       password: req.body.password,
     };
+    try {
+      const response = await this.loginUserService.execute(data);
 
-    const response = await this.loginUserService.execute(data);
+      if (response.isFailure()) {
+        const err = response.error!;
+        return res.status(err.statusCode).json({ error: err.message });
+      }
 
-    if (response.isFailure()) {
-      const err = response.error!;
-      return res.status(err.statusCode).json({ error: err.message });
+      return res.status(201).json({ response });
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An unknown error occurred';
+      return res.status(400).json({ error: errorMessage });
     }
-
-    return res.status(201).json({ response });
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
