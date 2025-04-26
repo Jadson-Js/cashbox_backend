@@ -13,44 +13,43 @@ enum TransactionType {
 }
 
 model User {
-  id          String         @id @default(uuid())
-  email       String         @unique
-  password    String
-  created_at  DateTime       @default(now())
-  updated_at  DateTime       @default(now()) @updatedAt
+  id         String   @id @default(uuid())
+  email      String   @unique
+  password   String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
 
-  transactions Transaction[] // relação 1:N com transações
+  transactions Transaction[]
 
   @@map("users")
 }
 
 model Transaction {
-  id               String           @id @default(uuid())
-  amount           Float
+  id               String          @id @default(uuid())
+  amount           Decimal
   type             TransactionType
   description      String
-  transaction_date DateTime         @default(now())
-  created_at       DateTime         @default(now())
-  updated_at       DateTime         @updatedAt
+  transaction_date DateTime        @default(now())
+  created_at       DateTime        @default(now())
+  updated_at       DateTime        @default(now()) @updatedAt
 
-  user_id           String           // chave estrangeira
-  category_id       String           // chave estrangeira
-  user             User             @relation(fields: [user_id], references: [id])
-  category         Category         @relation(fields: [category_id], references: [id])
+  user_id     String
+  category_id String
+  user        User     @relation(fields: [user_id], references: [id])
+  category    Category @relation(fields: [category_id], references: [id])
 
   @@map("transactions")
 }
 
-
 model Category {
-  id          String        @id @default(uuid())
-  icon_url    String
-  title       String
-  description String
-  created_at  DateTime      @default(now())
-  updated_at  DateTime      @updatedAt
+  id         String   @id @default(uuid())
+  icon_svg   String   @db.LongText
+  title      String
+  color      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  transactions Transaction[] // relação 1:N com transações
+  transactions Transaction[]
 
   @@map("categories")
 }
