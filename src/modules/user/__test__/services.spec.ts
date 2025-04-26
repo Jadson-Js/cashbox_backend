@@ -1,5 +1,7 @@
 // IMPORT SERVICES
 import { FindUserService } from '../services/find-user.service';
+import { SignupUserService } from '../services/signup-user.service';
+import { LoginUserService } from '../services/login-user.service';
 
 // IMPORT REPOSITORIES
 import { UserRepository } from '../repositories/user.repository';
@@ -7,21 +9,45 @@ import { UserRepository } from '../repositories/user.repository';
 // IMPORT DTOS
 import { FindUserOutput } from '../dtos/find-user.dto';
 import { CreateUserInput, CreateUserOutput } from '../dtos/create-user.dto';
-import { SignupUserService } from '../services/signup-user.service';
+import { LoginUserInput, LoginUserOutput } from '../dtos/login-user.dto';
+import {
+  FindByEmailUserInput,
+  FindByEmailUserOutput,
+} from '../dtos/findByEmail-user.dto';
 
 // IMPOT UTILS
-import { hashPassword } from '../../../shared/utils/bcrypt';
+import { hashPassword, comparePassword } from '../../../shared/utils/bcrypt';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from '../../../shared/utils/jwt';
+import { compare } from 'bcryptjs';
+import {
+  NotFoundError,
+  UnauthorizedError,
+  Result,
+} from '../../../shared/utils/error';
+import { password } from '../../../shared/middlewares/schemas-zod';
 
-// MOCK DEPENDENCIES
+// MOCKS
 jest.mock('../repositories/user.repository');
 jest.mock('../../../shared/utils/bcrypt', () => ({
   hashPassword: jest.fn().mockResolvedValue('hashed_password_123'),
+  comparePassword: jest.fn().mockResolvedValue(true),
+}));
+jest.mock('../../../shared/utils/jwt', () => ({
+  generateAccessToken: jest.fn().mockReturnValue('access_token_123'),
+  generateRefreshToken: jest.fn().mockReturnValue('refresh_token_123'),
+}));
+jest.mock('bcryptjs', () => ({
+  comparePassword: jest.fn(),
 }));
 
 describe('User Services', () => {
   // SETUP
   let findUserService: FindUserService;
   let signupUserService: SignupUserService;
+  let loginUserService: LoginUserService;
 
   let userRepository: jest.Mocked<UserRepository>;
 
@@ -36,6 +62,7 @@ describe('User Services', () => {
 
     findUserService = new FindUserService(userRepository);
     signupUserService = new SignupUserService(userRepository);
+    loginUserService = new LoginUserService(userRepository);
   });
 
   it('should return all users', async () => {
@@ -73,7 +100,7 @@ describe('User Services', () => {
       password: 'test',
     };
 
-    const inputHashedPassword: CreateUserInput = {
+    const inputFormated: CreateUserInput = {
       email: 'test@test.com',
       password: 'hashed_password_123',
     };
@@ -90,8 +117,56 @@ describe('User Services', () => {
     // ASSERT
     expect(result).toEqual(output);
     expect(userRepository.create).toHaveBeenCalledTimes(1);
-    expect(userRepository.create).toHaveBeenCalledWith(inputHashedPassword);
+    expect(userRepository.create).toHaveBeenCalledWith(inputFormated);
     expect(hashPassword).toHaveBeenCalledTimes(1);
     expect(hashPassword).toHaveBeenCalledWith(input.password);
+  });
+
+  it('should login a user', async () => {
+    // ARRANGE
+    const input: LoginUserInput = {
+      email: 'test@test.com',
+      password: 'test',
+    };
+    const output: LoginUserOutput = {
+      id: '1',
+      email: 'test@test.com',
+      accessToken: 'access_token_123',
+      refreshToken: 'refresh_token_123',
+    };
+
+    const inputFindByEmail: FindByEmailUserInput = {
+      email: 'test@test.com',
+    };
+    const outputFindByEmail: FindByEmailUserOutput = {
+      id: '1',
+      email: 'test@test.com',
+      password: 'hashed_password_123',
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
+    userRepository.findByEmail = jest.fn().mockResolvedValue(outputFindByEmail);
+    (comparePassword as jest.Mock).mockResolvedValue(true);
+    (generateAccessToken as jest.Mock).mockReturnValue('access_token_123');
+    (generateRefreshToken as jest.Mock).mockReturnValue('refresh_token_123');
+
+    // ACT
+    const result = await loginUserService.execute(input);
+
+    // ASSERT
+    console.log(result);
+    expect(result.value).toEqual(output);
+    expect(userRepository.findByEmail).toHaveBeenCalledTimes(1);
+    expect(userRepository.findByEmail).toHaveBeenCalledWith(inputFindByEmail);
+    expect(comparePassword).toHaveBeenCalledTimes(1);
+    expect(comparePassword).toHaveBeenCalledWith({
+      password: input.password,
+      hashedPassword: outputFindByEmail.password,
+    });
+    expect(generateAccessToken).toHaveBeenCalledTimes(1);
+    expect(generateAccessToken).toHaveBeenCalledWith(outputFindByEmail.id);
+    expect(generateRefreshToken).toHaveBeenCalledTimes(1);
+    expect(generateRefreshToken).toHaveBeenCalledWith(outputFindByEmail.id);
   });
 });
