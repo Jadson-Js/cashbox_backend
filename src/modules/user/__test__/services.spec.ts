@@ -2,6 +2,7 @@
 import { FindUserService } from '../services/find-user.service';
 import { SignupUserService } from '../services/signup-user.service';
 import { LoginUserService } from '../services/login-user.service';
+import { DeleteUserService } from '../services/delete-user.service';
 
 // IMPORT REPOSITORIES
 import { UserRepository } from '../repositories/user.repository';
@@ -21,13 +22,6 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from '../../../shared/utils/jwt';
-import { compare } from 'bcryptjs';
-import {
-  NotFoundError,
-  UnauthorizedError,
-  Result,
-} from '../../../shared/utils/error';
-import { password } from '../../../shared/middlewares/schemas-zod';
 
 // MOCKS
 jest.mock('../repositories/user.repository');
@@ -48,6 +42,7 @@ describe('User Services', () => {
   let findUserService: FindUserService;
   let signupUserService: SignupUserService;
   let loginUserService: LoginUserService;
+  let deleteUserService: DeleteUserService;
 
   let userRepository: jest.Mocked<UserRepository>;
 
@@ -63,6 +58,7 @@ describe('User Services', () => {
     findUserService = new FindUserService(userRepository);
     signupUserService = new SignupUserService(userRepository);
     loginUserService = new LoginUserService(userRepository);
+    deleteUserService = new DeleteUserService(userRepository);
   });
 
   it('should return all users', async () => {
@@ -146,12 +142,11 @@ describe('User Services', () => {
       updated_at: new Date(),
     };
 
+    // ACT
     userRepository.findByEmail = jest.fn().mockResolvedValue(outputFindByEmail);
     (comparePassword as jest.Mock).mockResolvedValue(true);
     (generateAccessToken as jest.Mock).mockReturnValue('access_token_123');
     (generateRefreshToken as jest.Mock).mockReturnValue('refresh_token_123');
-
-    // ACT
     const result = await loginUserService.execute(input);
 
     // ASSERT
@@ -168,5 +163,15 @@ describe('User Services', () => {
     expect(generateAccessToken).toHaveBeenCalledWith(outputFindByEmail.id);
     expect(generateRefreshToken).toHaveBeenCalledTimes(1);
     expect(generateRefreshToken).toHaveBeenCalledWith(outputFindByEmail.id);
+  });
+
+  it('should delete all users', async () => {
+    // ARRANGE
+    // ACT
+    userRepository.delete = jest.fn().mockResolvedValue(null);
+    const result = await deleteUserService.execute();
+    // ASSERT
+    expect(result).toBeUndefined();
+    expect(userRepository.delete).toHaveBeenCalledTimes(1);
   });
 });
