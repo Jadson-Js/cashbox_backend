@@ -24,6 +24,8 @@ export class PrismaCategoryRepository implements CategoryRepository {
       icon_svg: true,
       title: true,
       color: true,
+      created_at: true,
+      updated_at: true,
     };
 
     return prisma.category.findMany({
@@ -36,7 +38,7 @@ export class PrismaCategoryRepository implements CategoryRepository {
   ): Promise<CreateCategoryOutput> {
     const category = await prisma.category.create({ data: params });
 
-    return { id: category.id };
+    return category;
   }
 
   public async update(

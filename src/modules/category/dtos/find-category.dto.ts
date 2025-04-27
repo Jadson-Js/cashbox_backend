@@ -3,4 +3,6 @@ export interface FindCategoryOutput {
   icon_svg: string;
   title: string;
   color: string;
+  created_at: Date;
+  updated_at: Date;
 }
