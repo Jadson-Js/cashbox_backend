@@ -26,3 +26,4 @@ export const color = z.object({
 export const createSchema = icon_svg.merge(title).merge(color);
 export const updateSchemaParams = id;
 export const updateSchemaBody = icon_svg.merge(title).merge(color);
+export const deleteSchemaParams = id;

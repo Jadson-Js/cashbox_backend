@@ -4,6 +4,7 @@ import {
   createSchema,
   updateSchemaParams,
   updateSchemaBody,
+  deleteSchemaParams,
 } from '../../../shared/middlewares/schemas-zod';
 import { validate } from '../../../shared/middlewares/validate-zod';
 
@@ -28,8 +29,8 @@ router.patch(
   },
 );
 
-/* router.delete('/', (req, res) => {
+router.delete('/id/:id', validate(deleteSchemaParams, 'params'), (req, res) => {
   categoryController.delete(req, res);
-}); */
+});
 
 export default router;

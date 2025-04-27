@@ -8,12 +8,13 @@ import {
   UpdateCategoryInput,
   UpdateCategoryOutput,
 } from '../dtos/update-category.dto';
+import { DeleteCategoryInput } from '../dtos/delete-category.dto';
 
 export interface CategoryRepository {
   find(): Promise<FindCategoryOutput[] | null>;
   create(params: CreateCategoryInput): Promise<CreateCategoryOutput>;
   update(params: UpdateCategoryInput): Promise<UpdateCategoryOutput>;
-  /* delete(): Promise<void>; */
+  delete(params: DeleteCategoryInput): Promise<void>;
 }
 
 export class PrismaCategoryRepository implements CategoryRepository {
@@ -49,7 +50,9 @@ export class PrismaCategoryRepository implements CategoryRepository {
     return category;
   }
 
-  /* public async delete(): Promise<void> {
-    await prisma.category.deleteMany();
-  } */
+  public async delete(params: DeleteCategoryInput): Promise<void> {
+    await prisma.category.delete({
+      where: { id: params.id },
+    });
+  }
 }
