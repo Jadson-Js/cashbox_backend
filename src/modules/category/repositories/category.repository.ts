@@ -1,17 +1,18 @@
 import { prisma } from '../../../shared/prisma/client';
+import { FindCategoryOutput } from '../dtos/find-category.dto';
 import {
   CreateCategoryInput,
   CreateCategoryOutput,
 } from '../dtos/create-category.dto';
-/* import { FindCategoryOutput } from '../dtos/find-category.dto';
-import {
+import { icon_svg } from '../../../shared/middlewares/schemas-zod';
+/* import {
   FindByEmailCategoryInput,
   FindByEmailCategoryOutput,
 } from '../dtos/findByEmail-category.dto'; */
 
 export interface CategoryRepository {
-  /* find(): Promise<FindCategoryOutput[] | null>;
-  findByEmail(
+  find(): Promise<FindCategoryOutput[] | null>;
+  /* findByEmail(
     params: FindByEmailCategoryInput,
   ): Promise<FindByEmailCategoryOutput | null>; */
   create(params: CreateCategoryInput): Promise<CreateCategoryOutput>;
@@ -19,18 +20,18 @@ export interface CategoryRepository {
 }
 
 export class PrismaCategoryRepository implements CategoryRepository {
-  /*  public async find(): Promise<FindCategoryOutput[] | null> {
+  public async find(): Promise<FindCategoryOutput[] | null> {
     const select = {
       id: true,
-      email: true,
-      created_at: true,
-      updated_at: true,
+      icon_svg: true,
+      title: true,
+      color: true,
     };
 
     return prisma.category.findMany({
       select,
     });
-  } */
+  }
 
   /* public async findByEmail(
     params: FindByEmailCategoryInput,

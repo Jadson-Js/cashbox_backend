@@ -8,7 +8,7 @@ import { DeleteUserService } from '../services/delete-user.service';
 import { UserRepository } from '../repositories/category.repository';
 
 // IMPORT DTOS
-import { FindUserOutput } from '../dtos/find-user.dto';
+import { FindUserOutput } from '../dtos/find-category.dto';
 import { CreateUserInput, CreateUserOutput } from '../dtos/create-category.dto';
 import { LoginUserInput, LoginUserOutput } from '../dtos/login-user.dto';
 import {

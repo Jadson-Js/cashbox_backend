@@ -7,9 +7,9 @@ const router = Router();
 
 const categoryController = makeCategoryController();
 
-/* router.get('/', (req, res) => {
+router.get('/', (req, res) => {
   categoryController.find(req, res);
-}); */
+});
 
 router.post('/', validate(createSchema), (req, res) => {
   categoryController.create(req, res);
