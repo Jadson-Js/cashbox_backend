@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { makeUserController } from '../factories/makeUserController';
 import {
-  signupSchema,
-  loginSchema,
+  signupSchemaBody,
+  loginSchemaBody,
 } from '../../../shared/middlewares/schemas-zod';
 import { validate } from '../../../shared/middlewares/validate-zod';
 
@@ -14,11 +14,11 @@ router.get('/', (req, res) => {
   userController.find(req, res);
 });
 
-router.post('/signup', validate(signupSchema), (req, res) => {
+router.post('/signup', validate(signupSchemaBody, 'body'), (req, res) => {
   userController.signup(req, res);
 });
 
-router.post('/login', validate(loginSchema), (req, res) => {
+router.post('/login', validate(loginSchemaBody, 'body'), (req, res) => {
   userController.login(req, res);
 });
 

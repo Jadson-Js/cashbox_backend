@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { makeCategoryController } from '../factories/makeCategoryController';
 import {
-  createSchema,
+  createSchemaBody,
   updateSchemaParams,
   updateSchemaBody,
   deleteSchemaParams,
@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
   categoryController.find(req, res);
 });
 
-router.post('/', validate(createSchema), (req, res) => {
+router.post('/', validate(createSchemaBody, 'body'), (req, res) => {
   categoryController.create(req, res);
 });
 

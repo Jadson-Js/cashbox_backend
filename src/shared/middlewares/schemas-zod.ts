@@ -7,8 +7,8 @@ export const email = z.object({
 export const password = z.object({
   password: z.string().min(6).max(32),
 });
-export const signupSchema = email.merge(password);
-export const loginSchema = email.merge(password);
+export const signupSchemaBody = email.merge(password);
+export const loginSchemaBody = email.merge(password);
 
 // CATEGORY
 export const id = z.object({
@@ -23,7 +23,7 @@ export const title = z.object({
 export const color = z.object({
   color: z.string(),
 });
-export const createSchema = icon_svg.merge(title).merge(color);
+export const createSchemaBody = icon_svg.merge(title).merge(color);
 export const updateSchemaParams = id;
 export const updateSchemaBody = icon_svg.merge(title).merge(color);
 export const deleteSchemaParams = id;
