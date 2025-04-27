@@ -1,6 +1,6 @@
 import { FindCategoryService } from '../services/find-category.service';
 import { CreateCategoryService } from '../services/create-category.service';
-// import { LoginCategoryService } from '../services/login-category.service';
+import { UpdateCategoryService } from '../services/update-category.service';
 // import { DeleteCategoryService } from '../services/delete-category.service';
 
 import { CategoryController } from '../controllers/category.controller';
@@ -11,13 +11,13 @@ export function makeCategoryController() {
 
   const findCategoryService = new FindCategoryService(categoryRepository);
   const createCategoryService = new CreateCategoryService(categoryRepository);
-  // const loginCategoryService = new LoginCategoryService(categoryRepository);
+  const updateCategoryService = new UpdateCategoryService(categoryRepository);
   // const deleteCategoryService = new DeleteCategoryService(categoryRepository);
 
   const categoryController = new CategoryController(
     findCategoryService,
     createCategoryService,
-    // loginCategoryService,
+    updateCategoryService,
     // deleteCategoryService,
   );
 

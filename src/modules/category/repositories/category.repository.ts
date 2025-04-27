@@ -4,18 +4,15 @@ import {
   CreateCategoryInput,
   CreateCategoryOutput,
 } from '../dtos/create-category.dto';
-import { icon_svg } from '../../../shared/middlewares/schemas-zod';
-/* import {
-  FindByEmailCategoryInput,
-  FindByEmailCategoryOutput,
-} from '../dtos/findByEmail-category.dto'; */
+import {
+  UpdateCategoryInput,
+  UpdateCategoryOutput,
+} from '../dtos/update-category.dto';
 
 export interface CategoryRepository {
   find(): Promise<FindCategoryOutput[] | null>;
-  /* findByEmail(
-    params: FindByEmailCategoryInput,
-  ): Promise<FindByEmailCategoryOutput | null>; */
   create(params: CreateCategoryInput): Promise<CreateCategoryOutput>;
+  update(params: UpdateCategoryInput): Promise<UpdateCategoryOutput>;
   /* delete(): Promise<void>; */
 }
 
@@ -33,29 +30,23 @@ export class PrismaCategoryRepository implements CategoryRepository {
     });
   }
 
-  /* public async findByEmail(
-    params: FindByEmailCategoryInput,
-  ): Promise<FindByEmailCategoryOutput | null> {
-    const select = {
-      id: true,
-      email: true,
-      password: true,
-      created_at: true,
-      updated_at: true,
-    };
-
-    return prisma.category.findFirst({
-      where: { email: params.email },
-      select,
-    });
-  } */
-
   public async create(
     params: CreateCategoryInput,
   ): Promise<CreateCategoryOutput> {
     const category = await prisma.category.create({ data: params });
 
     return { id: category.id };
+  }
+
+  public async update(
+    params: UpdateCategoryInput,
+  ): Promise<UpdateCategoryOutput> {
+    const category = await prisma.category.update({
+      where: { id: params.id },
+      data: params,
+    });
+
+    return category;
   }
 
   /* public async delete(): Promise<void> {
