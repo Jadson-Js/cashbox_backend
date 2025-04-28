@@ -36,7 +36,13 @@ export class PrismaCategoryRepository implements CategoryRepository {
   public async create(
     params: CreateCategoryInput,
   ): Promise<CreateCategoryOutput> {
-    const category = await prisma.category.create({ data: params });
+    const input = {
+      icon_svg: params.icon_svg,
+      title: params.title,
+      color: params.color,
+    };
+
+    const category = await prisma.category.create({ data: input });
 
     return category;
   }
@@ -44,9 +50,15 @@ export class PrismaCategoryRepository implements CategoryRepository {
   public async update(
     params: UpdateCategoryInput,
   ): Promise<UpdateCategoryOutput> {
+    const input = {
+      icon_svg: params.icon_svg,
+      title: params.title,
+      color: params.color,
+    };
+
     const category = await prisma.category.update({
       where: { id: params.id },
-      data: params,
+      data: input,
     });
 
     return category;

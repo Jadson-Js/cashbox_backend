@@ -52,8 +52,17 @@ export class PrismaTransactionRepository implements TransactionRepository {
   public async create(
     params: CreateTransactionInput,
   ): Promise<CreateTransactionOutput> {
+    const input = {
+      amount: params.amount,
+      type: params.type,
+      description: params.description,
+      transaction_date: params.transaction_date,
+      category_id: params.category_id,
+      user_id: params.user_id,
+    };
+
     const transaction = await prisma.transaction.create({
-      data: params,
+      data: input,
     });
 
     return {
@@ -65,9 +74,17 @@ export class PrismaTransactionRepository implements TransactionRepository {
   public async update(
     params: UpdateTransactionInput,
   ): Promise<UpdateTransactionOutput> {
+    const input = {
+      amount: params.amount,
+      type: params.type,
+      description: params.description,
+      transaction_date: params.transaction_date,
+      category_id: params.category_id,
+    };
+
     const transaction = await prisma.transaction.update({
       where: { id: params.id },
-      data: params,
+      data: input,
     });
 
     return {

@@ -16,9 +16,7 @@ export const description = z.object({
 export const transaction_date = z.object({
   transaction_date: z.string().or(z.date()).pipe(z.coerce.date()),
 });
-export const user_id = z.object({
-  user_id: z.string(),
-});
+
 export const category_id = z.object({
   category_id: z.string(),
 });
@@ -27,7 +25,6 @@ export const createSchemaBody = amount
   .merge(type)
   .merge(description)
   .merge(transaction_date)
-  .merge(user_id)
   .merge(category_id);
 
 export const updateSchemaParams = id;
@@ -36,5 +33,4 @@ export const updateSchemaBody = amount
   .merge(type)
   .merge(description)
   .merge(transaction_date)
-  .merge(user_id)
   .merge(category_id);
