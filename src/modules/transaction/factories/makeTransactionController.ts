@@ -1,6 +1,6 @@
 import { FindTransactionByUserIdService } from '../services/findByUserId-transaction.service';
 import { CreateTransactionService } from '../services/create-transaction.service';
-//import { UpdateTransactionService } from '../services/update-transaction.service';
+import { UpdateTransactionService } from '../services/update-transaction.service';
 //import { DeleteTransactionService } from '../services/delete-transaction.service';
 
 import { TransactionController } from '../controllers/transaction.controller';
@@ -15,10 +15,10 @@ export function makeTransactionController() {
   const createTransactionService = new CreateTransactionService(
     transactionRepository,
   );
-  /*
   const updateTransactionService = new UpdateTransactionService(
     transactionRepository,
   );
+  /*
   const deleteTransactionService = new DeleteTransactionService(
     transactionRepository,
   );
@@ -27,7 +27,7 @@ export function makeTransactionController() {
   const transactionController = new TransactionController(
     findTransactionByUserIdService,
     createTransactionService,
-    //updateTransactionService,
+    updateTransactionService,
     //deleteTransactionService,
   );
 

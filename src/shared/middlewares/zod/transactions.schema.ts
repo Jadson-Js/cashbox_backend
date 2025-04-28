@@ -1,6 +1,9 @@
 import { z } from 'zod';
 import { TransactionType } from '../../../modules/transaction/models/transaction.model';
 
+export const id = z.object({
+  id: z.string(),
+});
 export const amount = z.object({
   amount: z.number(),
 });
@@ -21,6 +24,15 @@ export const category_id = z.object({
 });
 
 export const createSchemaBody = amount
+  .merge(type)
+  .merge(description)
+  .merge(transaction_date)
+  .merge(user_id)
+  .merge(category_id);
+
+export const updateSchemaParams = id;
+
+export const updateSchemaBody = amount
   .merge(type)
   .merge(description)
   .merge(transaction_date)

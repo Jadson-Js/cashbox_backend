@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
 import { FindTransactionByUserIdService } from '../services/findByUserId-transaction.service';
 import { CreateTransactionService } from '../services/create-transaction.service';
-//import { UpdateTransactionService } from '../services/update-transaction.service';
+import { UpdateTransactionService } from '../services/update-transaction.service';
 //import { DeleteTransactionService } from '../services/delete-transaction.service';
 
 export class TransactionController {
   public constructor(
     private readonly findTransactionByUserIdService: FindTransactionByUserIdService,
     private readonly createTransactionService: CreateTransactionService,
-    //private readonly updateTransactionService: UpdateTransactionService,
+    private readonly updateTransactionService: UpdateTransactionService,
     //private readonly deleteTransactionService: DeleteTransactionService,
   ) {}
 
@@ -45,14 +45,17 @@ export class TransactionController {
       return res.status(400).json({ error: errorMessage });
     }
   }
-  /*
+
   public async update(req: Request, res: Response): Promise<Response> {
     try {
       const data = {
         id: req.params.id,
-        icon_svg: req.body.icon_svg,
-        title: req.body.title,
-        color: req.body.color,
+        amount: req.body.amount,
+        type: req.body.type,
+        description: req.body.description,
+        transaction_date: req.body.transaction_date,
+        user_id: req.user_id as string,
+        category_id: req.body.category_id,
       };
 
       const response = await this.updateTransactionService.execute(data);
@@ -64,7 +67,7 @@ export class TransactionController {
       return res.status(400).json({ error: errorMessage });
     }
   }
-
+  /*
   public async delete(req: Request, res: Response): Promise<Response> {
     try {
       const data = {

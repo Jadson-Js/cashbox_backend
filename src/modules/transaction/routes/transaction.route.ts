@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import { makeTransactionController } from '../factories/makeTransactionController';
 import { verifyAuthToken } from '../../../shared/middlewares/auth';
-import { createSchemaBody } from '../../../shared/middlewares/zod/transactions.schema';
+import {
+  createSchemaBody,
+  updateSchemaParams,
+  updateSchemaBody,
+} from '../../../shared/middlewares/zod/transactions.schema';
 import { validate } from '../../../shared/middlewares/zod/validate-zod';
 
 const router = Router();
@@ -20,7 +24,7 @@ router.post(
     transactionController.create(req, res);
   },
 );
-/*
+
 router.patch(
   '/id/:id',
   verifyAuthToken,
@@ -30,7 +34,7 @@ router.patch(
     transactionController.update(req, res);
   },
 );
-
+/*
 router.delete(
   '/id/:id',
   verifyAuthToken,

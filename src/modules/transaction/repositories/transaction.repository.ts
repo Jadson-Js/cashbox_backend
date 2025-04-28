@@ -7,10 +7,10 @@ import {
   CreateTransactionInput,
   CreateTransactionOutput,
 } from '../dtos/create-transaction.dto';
-/* import {
+import {
   UpdateTransactionInput,
   UpdateTransactionOutput,
-} from '../dtos/update-transaction.dto'; */
+} from '../dtos/update-transaction.dto';
 /* import { DeleteTransactionInput } from '../dtos/delete-transaction.dto'; */
 
 export interface TransactionRepository {
@@ -18,7 +18,7 @@ export interface TransactionRepository {
     params: FindTransactionByUserIdInput,
   ): Promise<FindTransactionByUserIdOutput[] | null>;
   create(params: CreateTransactionInput): Promise<CreateTransactionOutput>;
-  //update(params: UpdateTransactionInput): Promise<UpdateTransactionOutput>;
+  update(params: UpdateTransactionInput): Promise<UpdateTransactionOutput>;
   //delete(params: DeleteTransactionInput): Promise<void>;
 }
 
@@ -62,7 +62,7 @@ export class PrismaTransactionRepository implements TransactionRepository {
     };
   }
 
-  /*  public async update(
+  public async update(
     params: UpdateTransactionInput,
   ): Promise<UpdateTransactionOutput> {
     const transaction = await prisma.transaction.update({
@@ -70,8 +70,11 @@ export class PrismaTransactionRepository implements TransactionRepository {
       data: params,
     });
 
-    return transaction;
-  } */
+    return {
+      ...transaction,
+      type: transaction.type as CreateTransactionOutput['type'],
+    };
+  }
 
   /* public async delete(params: DeleteTransactionInput): Promise<void> {
     await prisma.transaction.delete({

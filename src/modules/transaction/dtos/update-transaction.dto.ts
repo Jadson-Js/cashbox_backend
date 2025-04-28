@@ -1,15 +1,24 @@
-export interface UpdateCategoryInput {
+import { Decimal } from '@prisma/client/runtime/library';
+import { TransactionType } from '../models/transaction.model';
+
+export interface UpdateTransactionInput {
   id: string;
-  icon_svg: string;
-  title: string;
-  color: string;
+  amount: Decimal;
+  type: TransactionType;
+  description: string | null;
+  transaction_date: Date;
+  user_id: string;
+  category_id: string;
 }
 
-export interface UpdateCategoryOutput {
+export interface UpdateTransactionOutput {
   id: string;
-  icon_svg: string;
-  title: string;
-  color: string;
+  amount: Decimal;
+  type: TransactionType;
+  description: string | null;
+  transaction_date: Date;
   created_at: Date;
   updated_at: Date;
+  user_id: string;
+  category_id: string;
 }

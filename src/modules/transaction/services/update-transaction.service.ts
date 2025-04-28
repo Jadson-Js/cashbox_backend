@@ -1,17 +1,19 @@
-import { CategoryRepository } from '../repositories/transaction.repository';
+import { TransactionRepository } from '../repositories/transaction.repository';
 import {
-  UpdateCategoryInput,
-  UpdateCategoryOutput,
+  UpdateTransactionInput,
+  UpdateTransactionOutput,
 } from '../dtos/update-transaction.dto';
 
-export class UpdateCategoryService {
-  public constructor(private readonly categoryRepository: CategoryRepository) {}
+export class UpdateTransactionService {
+  public constructor(
+    private readonly transactionRepository: TransactionRepository,
+  ) {}
 
   public async execute(
-    params: UpdateCategoryInput,
-  ): Promise<UpdateCategoryOutput> {
-    const category = await this.categoryRepository.update(params);
+    params: UpdateTransactionInput,
+  ): Promise<UpdateTransactionOutput> {
+    const transaction = await this.transactionRepository.update(params);
 
-    return category;
+    return transaction;
   }
 }
