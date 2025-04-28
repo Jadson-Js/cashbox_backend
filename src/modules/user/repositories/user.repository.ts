@@ -1,10 +1,11 @@
 import { prisma } from '../../../shared/prisma/client';
-import { CreateUserInput, CreateUserOutput } from '../dtos/create-user.dto';
+
 import { FindUserOutput } from '../dtos/find-user.dto';
 import {
   FindByEmailUserInput,
   FindByEmailUserOutput,
 } from '../dtos/findByEmail-user.dto';
+import { CreateUserInput, CreateUserOutput } from '../dtos/create-user.dto';
 
 export interface UserRepository {
   find(): Promise<FindUserOutput[] | null>;

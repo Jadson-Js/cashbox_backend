@@ -1,9 +1,11 @@
 import { FindUserService } from '../services/find-user.service';
 import { SignupUserService } from '../services/signup-user.service';
-import { UserController } from '../controllers/user.controller';
-import { PrismaUserRepository } from '../repositories/user.repository';
 import { LoginUserService } from '../services/login-user.service';
 import { DeleteUserService } from '../services/delete-user.service';
+
+import { UserController } from '../controllers/user.controller';
+
+import { PrismaUserRepository } from '../repositories/user.repository';
 
 export function makeUserController() {
   const userRepository = new PrismaUserRepository();

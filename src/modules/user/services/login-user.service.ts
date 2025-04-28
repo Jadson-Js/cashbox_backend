@@ -1,11 +1,11 @@
 import { UserRepository } from '../repositories/user.repository';
-import { comparePassword } from '../../../shared/utils/bcrypt';
 import { LoginUserInput, LoginUserOutput } from '../dtos/login-user.dto';
+
 import {
   generateAccessToken,
   generateRefreshToken,
 } from '../../../shared/utils/jwt';
-
+import { comparePassword } from '../../../shared/utils/bcrypt';
 import {
   Result,
   AppError,
