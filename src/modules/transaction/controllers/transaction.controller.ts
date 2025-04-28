@@ -60,6 +60,11 @@ export class TransactionController {
 
       const response = await this.updateTransactionService.execute(data);
 
+      if (response.isFailure()) {
+        const err = response.error!;
+        return res.status(err.statusCode).json({ error: err.message });
+      }
+
       return res.status(200).json({ response });
     } catch (err: unknown) {
       const errorMessage =
@@ -75,8 +80,14 @@ export class TransactionController {
         id: req.params.id,
       };
 
-      await this.deleteTransactionService.execute(data);
-      return res.status(204).send();
+      const response = await this.deleteTransactionService.execute(data);
+
+      if (response.isFailure()) {
+        const err = response.error!;
+        return res.status(err.statusCode).json({ error: err.message });
+      }
+
+      return res.status(204).json({ response });
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'An unknown error occurred';

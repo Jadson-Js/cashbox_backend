@@ -26,12 +26,11 @@ export class DeleteTransactionService {
     });
 
     if (result.isFailure()) {
-      return Result.fail(result.error);
+      return result;
     }
 
     await this.transactionRepository.delete(params);
-
-    return Result.ok(undefined);
+    return Result.ok();
   }
 
   private async checkTransactionOwner(
@@ -48,7 +47,6 @@ export class DeleteTransactionService {
     if (transaction.user_id !== params.user_id) {
       return Result.fail(new ForbiddenError());
     }
-
-    return Result.ok(undefined);
+    return Result.ok();
   }
 }
