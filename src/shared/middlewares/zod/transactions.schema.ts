@@ -34,3 +34,5 @@ export const updateSchemaBody = amount
   .merge(description)
   .merge(transaction_date)
   .merge(category_id);
+
+export const deleteSchemaParams = id;

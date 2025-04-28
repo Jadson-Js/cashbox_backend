@@ -15,7 +15,7 @@ import {
   UpdateTransactionInput,
   UpdateTransactionOutput,
 } from '../dtos/update-transaction.dto';
-/* import { DeleteTransactionInput } from '../dtos/delete-transaction.dto'; */
+import { DeleteTransactionInput } from '../dtos/delete-transaction.dto';
 
 export interface TransactionRepository {
   findById(
@@ -26,7 +26,7 @@ export interface TransactionRepository {
   ): Promise<FindTransactionByUserIdOutput[] | null>;
   create(params: CreateTransactionInput): Promise<CreateTransactionOutput>;
   update(params: UpdateTransactionInput): Promise<UpdateTransactionOutput>;
-  //delete(params: DeleteTransactionInput): Promise<void>;
+  delete(params: DeleteTransactionInput): Promise<void>;
 }
 
 export class PrismaTransactionRepository implements TransactionRepository {
@@ -130,9 +130,9 @@ export class PrismaTransactionRepository implements TransactionRepository {
     };
   }
 
-  /* public async delete(params: DeleteTransactionInput): Promise<void> {
+  public async delete(params: DeleteTransactionInput): Promise<void> {
     await prisma.transaction.delete({
       where: { id: params.id },
     });
-  } */
+  }
 }

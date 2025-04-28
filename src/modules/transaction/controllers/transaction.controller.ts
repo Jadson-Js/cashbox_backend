@@ -2,14 +2,14 @@ import { Request, Response } from 'express';
 import { FindTransactionByUserIdService } from '../services/findByUserId-transaction.service';
 import { CreateTransactionService } from '../services/create-transaction.service';
 import { UpdateTransactionService } from '../services/update-transaction.service';
-//import { DeleteTransactionService } from '../services/delete-transaction.service';
+import { DeleteTransactionService } from '../services/delete-transaction.service';
 
 export class TransactionController {
   public constructor(
     private readonly findTransactionByUserIdService: FindTransactionByUserIdService,
     private readonly createTransactionService: CreateTransactionService,
     private readonly updateTransactionService: UpdateTransactionService,
-    //private readonly deleteTransactionService: DeleteTransactionService,
+    private readonly deleteTransactionService: DeleteTransactionService,
   ) {}
 
   public async findByUserId(req: Request, res: Response): Promise<Response> {
@@ -67,10 +67,11 @@ export class TransactionController {
       return res.status(400).json({ error: errorMessage });
     }
   }
-  /*
+
   public async delete(req: Request, res: Response): Promise<Response> {
     try {
       const data = {
+        user_id: req.user_id as string,
         id: req.params.id,
       };
 
@@ -82,5 +83,4 @@ export class TransactionController {
       return res.status(400).json({ error: errorMessage });
     }
   }
-    */
 }

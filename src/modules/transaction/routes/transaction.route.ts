@@ -5,6 +5,7 @@ import {
   createSchemaBody,
   updateSchemaParams,
   updateSchemaBody,
+  deleteSchemaParams,
 } from '../../../shared/middlewares/zod/transactions.schema';
 import { validate } from '../../../shared/middlewares/zod/validate-zod';
 
@@ -34,7 +35,7 @@ router.patch(
     transactionController.update(req, res);
   },
 );
-/*
+
 router.delete(
   '/id/:id',
   verifyAuthToken,
@@ -43,6 +44,5 @@ router.delete(
     transactionController.delete(req, res);
   },
 );
-*/
 
 export default router;

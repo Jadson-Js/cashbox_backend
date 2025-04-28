@@ -1,3 +1,4 @@
-export interface DeleteCategoryInput {
+export interface DeleteTransactionInput {
   id: string;
+  user_id: string;
 }
