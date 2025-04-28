@@ -1,4 +1,4 @@
-import { FindTransactionService } from '../services/findByUserId-transaction.service';
+import { FindTransactionByUserIdService } from '../services/findByUserId-transaction.service';
 import { CreateTransactionService } from '../services/create-transaction.service';
 //import { UpdateTransactionService } from '../services/update-transaction.service';
 //import { DeleteTransactionService } from '../services/delete-transaction.service';
@@ -9,7 +9,7 @@ import { PrismaTransactionRepository } from '../repositories/transaction.reposit
 export function makeTransactionController() {
   const transactionRepository = new PrismaTransactionRepository();
 
-  const findTransactionService = new FindTransactionService(
+  const findTransactionByUserIdService = new FindTransactionByUserIdService(
     transactionRepository,
   );
   const createTransactionService = new CreateTransactionService(
@@ -25,7 +25,7 @@ export function makeTransactionController() {
   */
 
   const transactionController = new TransactionController(
-    findTransactionService,
+    findTransactionByUserIdService,
     createTransactionService,
     //updateTransactionService,
     //deleteTransactionService,

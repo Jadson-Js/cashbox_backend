@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { FindTransactionService } from '../services/findByUserId-transaction.service';
+import { FindTransactionByUserIdService } from '../services/findByUserId-transaction.service';
 import { CreateTransactionService } from '../services/create-transaction.service';
 //import { UpdateTransactionService } from '../services/update-transaction.service';
 //import { DeleteTransactionService } from '../services/delete-transaction.service';
 
 export class TransactionController {
   public constructor(
-    private readonly findTransactionService: FindTransactionService,
+    private readonly findTransactionByUserIdService: FindTransactionByUserIdService,
     private readonly createTransactionService: CreateTransactionService,
     //private readonly updateTransactionService: UpdateTransactionService,
     //private readonly deleteTransactionService: DeleteTransactionService,
@@ -16,7 +16,7 @@ export class TransactionController {
     try {
       const data = { user_id: req.user_id as string };
 
-      const response = await this.findTransactionService.execute(data);
+      const response = await this.findTransactionByUserIdService.execute(data);
       return res.status(200).json(response);
     } catch (err: unknown) {
       const errorMessage =

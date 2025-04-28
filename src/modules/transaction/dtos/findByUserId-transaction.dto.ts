@@ -1,11 +1,11 @@
 import { Decimal } from '@prisma/client/runtime/library';
 import { TransactionType } from '../models/transaction.model';
 
-export interface FindByUserIdInput {
+export interface FindTransactionByUserIdInput {
   user_id: string;
 }
 
-export interface FindByUserIdOutput {
+export interface FindTransactionByUserIdOutput {
   id: string;
   amount: Decimal;
   type: TransactionType;

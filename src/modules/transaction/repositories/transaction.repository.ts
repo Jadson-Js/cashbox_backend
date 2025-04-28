@@ -1,7 +1,7 @@
 import { prisma } from '../../../shared/prisma/client';
 import {
-  FindByUserIdInput,
-  FindByUserIdOutput,
+  FindTransactionByUserIdInput,
+  FindTransactionByUserIdOutput,
 } from '../dtos/findByUserId-transaction.dto';
 import {
   CreateTransactionInput,
@@ -14,16 +14,18 @@ import {
 /* import { DeleteTransactionInput } from '../dtos/delete-transaction.dto'; */
 
 export interface TransactionRepository {
-  find(params: FindByUserIdInput): Promise<FindByUserIdOutput[] | null>;
+  findByUserId(
+    params: FindTransactionByUserIdInput,
+  ): Promise<FindTransactionByUserIdOutput[] | null>;
   create(params: CreateTransactionInput): Promise<CreateTransactionOutput>;
   //update(params: UpdateTransactionInput): Promise<UpdateTransactionOutput>;
   //delete(params: DeleteTransactionInput): Promise<void>;
 }
 
 export class PrismaTransactionRepository implements TransactionRepository {
-  public async find(
-    params: FindByUserIdInput,
-  ): Promise<FindByUserIdOutput[] | null> {
+  public async findByUserId(
+    params: FindTransactionByUserIdInput,
+  ): Promise<FindTransactionByUserIdOutput[] | null> {
     const select = {
       id: true,
       amount: true,
@@ -43,7 +45,7 @@ export class PrismaTransactionRepository implements TransactionRepository {
 
     return transactions.map((transaction) => ({
       ...transaction,
-      type: transaction.type as FindByUserIdOutput['type'],
+      type: transaction.type as FindTransactionByUserIdOutput['type'],
     }));
   }
 
