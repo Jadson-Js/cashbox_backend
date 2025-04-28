@@ -1,5 +1,9 @@
 import { prisma } from '../../../shared/prisma/client';
 import {
+  FindTransactionByIdInput,
+  FindTransactionByIdOutput,
+} from '../dtos/findById-transaction.dto';
+import {
   FindTransactionByUserIdInput,
   FindTransactionByUserIdOutput,
 } from '../dtos/findByUserId-transaction.dto';
@@ -14,6 +18,9 @@ import {
 /* import { DeleteTransactionInput } from '../dtos/delete-transaction.dto'; */
 
 export interface TransactionRepository {
+  findById(
+    params: FindTransactionByIdInput,
+  ): Promise<FindTransactionByIdOutput | null>;
   findByUserId(
     params: FindTransactionByUserIdInput,
   ): Promise<FindTransactionByUserIdOutput[] | null>;
@@ -23,6 +30,36 @@ export interface TransactionRepository {
 }
 
 export class PrismaTransactionRepository implements TransactionRepository {
+  public async findById(
+    params: FindTransactionByIdInput,
+  ): Promise<FindTransactionByIdOutput | null> {
+    const select = {
+      id: true,
+      amount: true,
+      type: true,
+      description: true,
+      transaction_date: true,
+      created_at: true,
+      updated_at: true,
+      user_id: true,
+      category_id: true,
+    };
+
+    const transaction = await prisma.transaction.findFirst({
+      where: { id: params.id },
+      select,
+    });
+
+    if (!transaction) {
+      return null;
+    }
+
+    return {
+      ...transaction,
+      type: transaction.type as FindTransactionByIdOutput['type'],
+    };
+  }
+
   public async findByUserId(
     params: FindTransactionByUserIdInput,
   ): Promise<FindTransactionByUserIdOutput[] | null> {
@@ -89,7 +126,7 @@ export class PrismaTransactionRepository implements TransactionRepository {
 
     return {
       ...transaction,
-      type: transaction.type as CreateTransactionOutput['type'],
+      type: transaction.type as UpdateTransactionOutput['type'],
     };
   }
 
