@@ -8,9 +8,9 @@ const router = Router();
 
 const transactionController = makeTransactionController();
 
-/* router.get('/', verifyAuthToken, (req, res) => {
-  transactionController.find(req, res);
-}); */
+router.get('/', verifyAuthToken, (req, res) => {
+  transactionController.findByUserId(req, res);
+});
 
 router.post(
   '/',

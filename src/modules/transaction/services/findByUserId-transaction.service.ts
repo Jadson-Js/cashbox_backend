@@ -1,11 +1,16 @@
-import { CategoryRepository } from '../repositories/transaction.repository';
-import { FindCategoryOutput } from '../dtos/findByUserId-transaction.dto';
+import { TransactionRepository } from '../repositories/transaction.repository';
+import {
+  FindByUserIdInput,
+  FindByUserIdOutput,
+} from '../dtos/findByUserId-transaction.dto';
 
-export class FindCategoryService {
-  public constructor(private categoryRepository: CategoryRepository) {}
+export class FindTransactionService {
+  public constructor(private categoryRepository: TransactionRepository) {}
 
-  public async execute(): Promise<FindCategoryOutput[] | null> {
-    const categories = await this.categoryRepository.find();
-    return categories;
+  public async execute(
+    params: FindByUserIdInput,
+  ): Promise<FindByUserIdOutput[] | null> {
+    const transactions = await this.categoryRepository.find(params);
+    return transactions;
   }
 }
