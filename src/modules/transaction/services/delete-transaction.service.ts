@@ -1,16 +1,7 @@
 import { TransactionRepository } from '../repositories/transaction.repository';
 import { DeleteTransactionInput } from '../dtos/delete-transaction.dto';
-import {
-  Result,
-  AppError,
-  NotFoundError,
-  ForbiddenError,
-} from '../../../shared/utils/error';
-
-interface CheckTransactionOwnerInput {
-  transaction_id: string;
-  user_id: string;
-}
+import { CheckTransactionOwnerService } from './checkOwner-transaction.service';
+import { Result, AppError } from '../../../shared/utils/error';
 
 export class DeleteTransactionService {
   public constructor(
@@ -20,9 +11,12 @@ export class DeleteTransactionService {
   public async execute(
     params: DeleteTransactionInput,
   ): Promise<Result<void, AppError>> {
-    const result = await this.checkTransactionOwner({
+    const checkTransactionOwnerService = new CheckTransactionOwnerService();
+
+    const result = await checkTransactionOwnerService.execute({
       transaction_id: params.id,
       user_id: params.user_id,
+      transactionRepository: this.transactionRepository,
     });
 
     if (result.isFailure()) {
@@ -30,23 +24,6 @@ export class DeleteTransactionService {
     }
 
     await this.transactionRepository.delete(params);
-    return Result.ok();
-  }
-
-  private async checkTransactionOwner(
-    params: CheckTransactionOwnerInput,
-  ): Promise<Result<void, AppError>> {
-    const transaction = await this.transactionRepository.findById({
-      id: params.transaction_id,
-    });
-
-    if (!transaction) {
-      return Result.fail(new NotFoundError('Transaction'));
-    }
-
-    if (transaction.user_id !== params.user_id) {
-      return Result.fail(new ForbiddenError());
-    }
     return Result.ok();
   }
 }
