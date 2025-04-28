@@ -17,12 +17,18 @@ router.get('/', verifyAuthToken, (req, res) => {
   categoryController.find(req, res);
 });
 
-router.post('/', validate(createSchemaBody, 'body'), (req, res) => {
-  categoryController.create(req, res);
-});
+router.post(
+  '/',
+  verifyAuthToken,
+  validate(createSchemaBody, 'body'),
+  (req, res) => {
+    categoryController.create(req, res);
+  },
+);
 
 router.patch(
   '/id/:id',
+  verifyAuthToken,
   validate(updateSchemaParams, 'params'),
   validate(updateSchemaBody, 'body'),
   (req, res) => {
@@ -30,8 +36,13 @@ router.patch(
   },
 );
 
-router.delete('/id/:id', validate(deleteSchemaParams, 'params'), (req, res) => {
-  categoryController.delete(req, res);
-});
+router.delete(
+  '/id/:id',
+  verifyAuthToken,
+  validate(deleteSchemaParams, 'params'),
+  (req, res) => {
+    categoryController.delete(req, res);
+  },
+);
 
 export default router;
