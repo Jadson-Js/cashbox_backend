@@ -11,12 +11,12 @@ if (!REFRESH_TOKEN_SECRET || !ACCESS_TOKEN_SECRET) {
   throw new Error('ACCESS_TOKEN_SECRET is not defined');
 }
 
-export function generateAccessToken(userId: string): string {
-  return jwt.sign({ userId }, accessToken, { expiresIn: '15m' });
+export function generateAccessToken(user_id: string): string {
+  return jwt.sign({ user_id }, accessToken, { expiresIn: '15m' });
 }
 
-export function generateRefreshToken(userId: string): string {
-  return jwt.sign({ userId }, refreshToken, { expiresIn: '7d' });
+export function generateRefreshToken(user_id: string): string {
+  return jwt.sign({ user_id }, refreshToken, { expiresIn: '7d' });
 }
 
 export function verifyAccessToken(token: string): string | JwtPayload {

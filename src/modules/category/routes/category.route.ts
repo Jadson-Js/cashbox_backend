@@ -1,18 +1,19 @@
 import { Router } from 'express';
 import { makeCategoryController } from '../factories/makeCategoryController';
+import { verifyAuthToken } from '../../../shared/middlewares/auth';
 import {
   createSchemaBody,
   updateSchemaParams,
   updateSchemaBody,
   deleteSchemaParams,
-} from '../../../shared/middlewares/schemas-zod';
-import { validate } from '../../../shared/middlewares/validate-zod';
+} from '../../../shared/middlewares/zod/schemas-zod';
+import { validate } from '../../../shared/middlewares/zod/validate-zod';
 
 const router = Router();
 
 const categoryController = makeCategoryController();
 
-router.get('/', (req, res) => {
+router.get('/', verifyAuthToken, (req, res) => {
   categoryController.find(req, res);
 });
 

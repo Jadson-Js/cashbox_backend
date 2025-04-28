@@ -3,8 +3,8 @@ import { makeUserController } from '../factories/makeUserController';
 import {
   signupSchemaBody,
   loginSchemaBody,
-} from '../../../shared/middlewares/schemas-zod';
-import { validate } from '../../../shared/middlewares/validate-zod';
+} from '../../../shared/middlewares/zod/schemas-zod';
+import { validate } from '../../../shared/middlewares/zod/validate-zod';
 
 const router = Router();
 
