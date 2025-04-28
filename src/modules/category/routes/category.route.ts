@@ -6,7 +6,7 @@ import {
   updateSchemaParams,
   updateSchemaBody,
   deleteSchemaParams,
-} from '../../../shared/middlewares/zod/schemas-zod';
+} from '../../../shared/middlewares/zod/category.schema';
 import { validate } from '../../../shared/middlewares/zod/validate-zod';
 
 const router = Router();
