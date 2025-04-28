@@ -12,11 +12,11 @@ if (!REFRESH_TOKEN_SECRET || !ACCESS_TOKEN_SECRET) {
 }
 
 export function generateAccessToken(user_id: string): string {
-  return jwt.sign({ user_id }, accessToken, { expiresIn: '15m' });
+  return jwt.sign({ user_id }, accessToken, { expiresIn: '30d' });
 }
 
 export function generateRefreshToken(user_id: string): string {
-  return jwt.sign({ user_id }, refreshToken, { expiresIn: '7d' });
+  return jwt.sign({ user_id }, refreshToken, { expiresIn: '30d' });
 }
 
 export function verifyAccessToken(token: string): string | JwtPayload {

@@ -28,7 +28,7 @@ model Transaction {
   id               String          @id @default(uuid())
   amount           Decimal
   type             TransactionType
-  description      String
+  description      String?
   transaction_date DateTime        @default(now())
   created_at       DateTime        @default(now())
   updated_at       DateTime        @default(now()) @updatedAt
