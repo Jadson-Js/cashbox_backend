@@ -13,65 +13,67 @@ export class CategoryController {
   ) {}
 
   public async find(req: Request, res: Response): Promise<Response> {
-    try {
-      const response = await this.findCategoryService.execute();
-      return res.status(200).json(response);
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
-      return res.status(400).json({ error: errorMessage });
+    const response = await this.findCategoryService.execute();
+
+    if (response.err) {
+      return res
+        .status(response.val.statusCode)
+        .json({ error: response.val.message });
     }
+
+    return res.status(200).json(response);
   }
 
   public async create(req: Request, res: Response): Promise<Response> {
-    try {
-      const data = {
-        icon_svg: req.body.icon_svg,
-        title: req.body.title,
-        color: req.body.color,
-      };
+    const data = {
+      icon_svg: req.body.icon_svg,
+      title: req.body.title,
+      color: req.body.color,
+    };
 
-      const response = await this.createCategoryService.execute(data);
+    const response = await this.createCategoryService.execute(data);
 
-      return res.status(201).json({ response });
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
-      return res.status(400).json({ error: errorMessage });
+    if (response.err) {
+      return res
+        .status(response.val.statusCode)
+        .json({ error: response.val.message });
     }
+
+    return res.status(201).json({ response });
   }
 
   public async update(req: Request, res: Response): Promise<Response> {
-    try {
-      const data = {
-        id: req.params.id,
-        icon_svg: req.body.icon_svg,
-        title: req.body.title,
-        color: req.body.color,
-      };
+    const data = {
+      id: req.params.id,
+      icon_svg: req.body.icon_svg,
+      title: req.body.title,
+      color: req.body.color,
+    };
 
-      const response = await this.updateCategoryService.execute(data);
+    const response = await this.updateCategoryService.execute(data);
 
-      return res.status(200).json({ response });
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
-      return res.status(400).json({ error: errorMessage });
+    if (response.err) {
+      return res
+        .status(response.val.statusCode)
+        .json({ error: response.val.message });
     }
+
+    return res.status(200).json({ response });
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
-    try {
-      const data = {
-        id: req.params.id,
-      };
+    const data = {
+      id: req.params.id,
+    };
 
-      await this.deleteCategoryService.execute(data);
-      return res.status(204).send();
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
-      return res.status(400).json({ error: errorMessage });
+    const response = await this.deleteCategoryService.execute(data);
+
+    if (response.err) {
+      return res
+        .status(response.val.statusCode)
+        .json({ error: response.val.message });
     }
+
+    return res.status(204).send();
   }
 }

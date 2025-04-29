@@ -12,6 +12,7 @@ export class UserController {
     private readonly deleteUserService: DeleteUserService,
   ) {}
 
+  // DESATUALIZADO
   public async find(req: Request, res: Response): Promise<Response> {
     try {
       const response = await this.findUserService.execute();
@@ -57,6 +58,7 @@ export class UserController {
     return res.status(201).json({ response });
   }
 
+  // DESATUALIZADO
   public async delete(req: Request, res: Response): Promise<Response> {
     try {
       await this.deleteUserService.execute();

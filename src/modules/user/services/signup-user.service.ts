@@ -2,6 +2,7 @@ import { Result, Err, Ok } from 'ts-results';
 
 import { UserRepository } from '../repositories/user.repository';
 import { CreateUserInput, CreateUserOutput } from '../dtos/create-user.dto';
+
 import { hashPassword } from '../../../shared/utils/bcrypt';
 import { AppError } from '../../../shared/utils/error';
 
@@ -21,6 +22,6 @@ export class SignupUserService {
       return Err(user.val);
     }
 
-    return Ok({ id: user.val.id, email: user.val.email });
+    return user;
   }
 }

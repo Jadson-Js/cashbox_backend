@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 
 import { verifyAccessToken } from '../utils/jwt';
-import { Result, AppError, UnauthorizedError } from '../utils/error';
+import { UnauthorizedError } from '../utils/error';
 
 // Extend the Request interface to include the 'id' property
 declare global {
@@ -27,8 +27,7 @@ export function verifyAuthToken(
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    Result.fail(new UnauthorizedError());
-    return;
+    return next(new UnauthorizedError());
   }
 
   const token = authHeader.split(' ')[1];
@@ -37,8 +36,7 @@ export function verifyAuthToken(
     const decoded = verifyAccessToken(token) as DecodedToken;
 
     if (!decoded || !decoded.user_id) {
-      Result.fail(new UnauthorizedError());
-      return;
+      return next(new UnauthorizedError());
     }
 
     req.user_id = decoded.user_id;
