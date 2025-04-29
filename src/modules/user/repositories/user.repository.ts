@@ -1,3 +1,5 @@
+import { Result, Err, Ok } from 'ts-results';
+
 import { prisma } from '../../../shared/prisma/client';
 
 import { FindUserOutput } from '../dtos/find-user.dto';
@@ -7,12 +9,14 @@ import {
 } from '../dtos/findByEmail-user.dto';
 import { CreateUserInput, CreateUserOutput } from '../dtos/create-user.dto';
 
+import { AppError, InternalServerError } from '../../../shared/utils/error';
+
 export interface UserRepository {
   find(): Promise<FindUserOutput[] | null>;
   findByEmail(
     params: FindByEmailUserInput,
   ): Promise<FindByEmailUserOutput | null>;
-  create(params: CreateUserInput): Promise<CreateUserOutput>;
+  create(params: CreateUserInput): Promise<Result<CreateUserOutput, AppError>>;
   delete(): Promise<void>;
 }
 
@@ -47,15 +51,22 @@ export class PrismaUserRepository implements UserRepository {
     });
   }
 
-  public async create(params: CreateUserInput): Promise<CreateUserOutput> {
+  public async create(
+    params: CreateUserInput,
+  ): Promise<Result<CreateUserOutput, AppError>> {
     const input = {
       email: params.email,
       password: params.password,
     };
 
-    const user = await prisma.user.create({ data: input });
+    try {
+      const user = await prisma.user.create({ data: input });
 
-    return { id: user.id, email: user.email };
+      return Ok({ id: user.id, email: user.email });
+    } catch (err: unknown) {
+      console.log(err);
+      return Err(new InternalServerError());
+    }
   }
 
   public async delete(): Promise<void> {

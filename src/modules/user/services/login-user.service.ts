@@ -1,3 +1,5 @@
+import { Result, Err, Ok } from 'ts-results';
+
 import { UserRepository } from '../repositories/user.repository';
 import { LoginUserInput, LoginUserOutput } from '../dtos/login-user.dto';
 
@@ -7,7 +9,6 @@ import {
 } from '../../../shared/utils/jwt';
 import { comparePassword } from '../../../shared/utils/bcrypt';
 import {
-  Result,
   AppError,
   NotFoundError,
   UnauthorizedError,
@@ -22,7 +23,7 @@ export class LoginUserService {
     const user = await this.userRepository.findByEmail({ email: params.email });
 
     if (!user) {
-      return Result.fail(new NotFoundError('Usuário'));
+      return Err(new NotFoundError('User'));
     }
 
     const passwordIsValid = await comparePassword({
@@ -31,10 +32,10 @@ export class LoginUserService {
     });
 
     if (!passwordIsValid) {
-      return Result.fail(new UnauthorizedError());
+      return Err(new UnauthorizedError());
     }
 
-    return Result.ok({
+    return Ok({
       id: user.id,
       email: user.email,
       accessToken: generateAccessToken(user.id),

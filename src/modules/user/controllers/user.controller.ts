@@ -24,20 +24,20 @@ export class UserController {
   }
 
   public async signup(req: Request, res: Response): Promise<Response> {
-    try {
-      const data = {
-        email: req.body.email,
-        password: req.body.password,
-      };
+    const data = {
+      email: req.body.email,
+      password: req.body.password,
+    };
 
-      const response = await this.signupUserService.execute(data);
+    const response = await this.signupUserService.execute(data);
 
-      return res.status(201).json({ response });
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
-      return res.status(400).json({ error: errorMessage });
+    if (response.err) {
+      return res
+        .status(response.val.statusCode)
+        .json({ error: response.val.message });
     }
+
+    return res.status(201).json({ response });
   }
 
   public async login(req: Request, res: Response): Promise<Response> {
@@ -45,20 +45,16 @@ export class UserController {
       email: req.body.email,
       password: req.body.password,
     };
-    try {
-      const response = await this.loginUserService.execute(data);
 
-      if (response.isFailure()) {
-        const err = response.error!;
-        return res.status(err.statusCode).json({ error: err.message });
-      }
+    const response = await this.loginUserService.execute(data);
 
-      return res.status(201).json({ response });
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
-      return res.status(400).json({ error: errorMessage });
+    if (response.err) {
+      return res
+        .status(response.val.statusCode)
+        .json({ error: response.val.message });
     }
+
+    return res.status(201).json({ response });
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {

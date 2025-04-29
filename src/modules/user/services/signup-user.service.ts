@@ -1,6 +1,9 @@
+import { Result, Err, Ok } from 'ts-results';
+
 import { UserRepository } from '../repositories/user.repository';
 import { CreateUserInput, CreateUserOutput } from '../dtos/create-user.dto';
 import { hashPassword } from '../../../shared/utils/bcrypt';
+import { AppError } from '../../../shared/utils/error';
 
 export class SignupUserService {
   public constructor(private readonly userRepository: UserRepository) {}
@@ -8,16 +11,16 @@ export class SignupUserService {
   public async execute({
     email,
     password,
-  }: CreateUserInput): Promise<CreateUserOutput> {
+  }: CreateUserInput): Promise<Result<CreateUserOutput, AppError>> {
     const passwordEncrypted = await hashPassword(password);
     const credentials = { email: email, password: passwordEncrypted };
 
     const user = await this.userRepository.create(credentials);
-    const response = {
-      id: user.id,
-      email: user.email,
-    };
 
-    return response;
+    if (user.err) {
+      return Err(user.val);
+    }
+
+    return Ok({ id: user.val.id, email: user.val.email });
   }
 }
