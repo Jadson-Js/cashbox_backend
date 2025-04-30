@@ -1,7 +1,9 @@
+import { Result, Err, Ok } from 'ts-results';
+import { AppError } from '../../../shared/utils/error';
+
 import { TransactionRepository } from '../repositories/transaction.repository';
 import { DeleteTransactionInput } from '../dtos/delete-transaction.dto';
 import { CheckTransactionOwnerService } from './checkOwner-transaction.service';
-import { Result, AppError } from '../../../shared/utils/error';
 
 export class DeleteTransactionService {
   public constructor(
@@ -19,11 +21,11 @@ export class DeleteTransactionService {
       transactionRepository: this.transactionRepository,
     });
 
-    if (result.isFailure()) {
-      return result;
+    if (result.err) {
+      return Err(result.val);
     }
 
-    await this.transactionRepository.delete(params);
-    return Result.ok();
+    const response = await this.transactionRepository.delete(params);
+    return response;
   }
 }

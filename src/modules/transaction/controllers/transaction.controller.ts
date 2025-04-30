@@ -13,85 +13,76 @@ export class TransactionController {
   ) {}
 
   public async findByUserId(req: Request, res: Response): Promise<Response> {
-    try {
-      const data = { user_id: req.user_id as string };
+    const data = { user_id: req.user_id as string };
 
-      const response = await this.findTransactionByUserIdService.execute(data);
-      return res.status(200).json(response);
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
-      return res.status(400).json({ error: errorMessage });
+    const response = await this.findTransactionByUserIdService.execute(data);
+
+    if (response.err) {
+      return res
+        .status(response.val.statusCode)
+        .json({ error: response.val.message });
     }
+
+    return res.status(200).json(response);
   }
 
   public async create(req: Request, res: Response): Promise<Response> {
-    try {
-      const data = {
-        amount: req.body.amount,
-        type: req.body.type,
-        description: req.body.description,
-        transaction_date: req.body.transaction_date,
-        user_id: req.user_id as string,
-        category_id: req.body.category_id,
-      };
+    const data = {
+      amount: req.body.amount,
+      type: req.body.type,
+      description: req.body.description,
+      transaction_date: req.body.transaction_date,
+      user_id: req.user_id as string,
+      category_id: req.body.category_id,
+    };
 
-      const response = await this.createTransactionService.execute(data);
+    const response = await this.createTransactionService.execute(data);
 
-      return res.status(201).json({ response });
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
-      return res.status(400).json({ error: errorMessage });
+    if (response.err) {
+      return res
+        .status(response.val.statusCode)
+        .json({ error: response.val.message });
     }
+
+    return res.status(201).json({ response });
   }
 
   public async update(req: Request, res: Response): Promise<Response> {
-    try {
-      const data = {
-        id: req.params.id,
-        amount: req.body.amount,
-        type: req.body.type,
-        description: req.body.description,
-        transaction_date: req.body.transaction_date,
-        user_id: req.user_id as string,
-        category_id: req.body.category_id,
-      };
+    const data = {
+      id: req.params.id,
+      amount: req.body.amount,
+      type: req.body.type,
+      description: req.body.description,
+      transaction_date: req.body.transaction_date,
+      user_id: req.user_id as string,
+      category_id: req.body.category_id,
+    };
 
-      const response = await this.updateTransactionService.execute(data);
+    const response = await this.updateTransactionService.execute(data);
 
-      if (response.isFailure()) {
-        const err = response.error!;
-        return res.status(err.statusCode).json({ error: err.message });
-      }
-
-      return res.status(200).json({ response });
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
-      return res.status(400).json({ error: errorMessage });
+    if (response.err) {
+      return res
+        .status(response.val.statusCode)
+        .json({ error: response.val.message });
     }
+
+    return res.status(200).json({ response });
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
-    try {
-      const data = {
-        user_id: req.user_id as string,
-        id: req.params.id,
-      };
+    const data = {
+      user_id: req.user_id as string,
+      id: req.params.id,
+    };
 
-      const response = await this.deleteTransactionService.execute(data);
+    const response = await this.deleteTransactionService.execute(data);
 
-      if (response.isFailure()) {
-        const err = response.error!;
-        return res.status(err.statusCode).json({ error: err.message });
-      }
-
-      return res.status(204).json({ response });
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
-      return res.status(400).json({ error: errorMessage });
+    if (response.err) {
+      return res
+        .status(response.val.statusCode)
+        .json({ error: response.val.message });
     }
+
+    return res.status(204).json({ response });
   }
 }

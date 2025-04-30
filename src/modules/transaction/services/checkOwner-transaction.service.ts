@@ -1,6 +1,8 @@
+import { Result, Err, Ok } from 'ts-results';
+
 import { TransactionRepository } from '../repositories/transaction.repository';
+
 import {
-  Result,
   AppError,
   NotFoundError,
   ForbiddenError,
@@ -20,13 +22,17 @@ export class CheckTransactionOwnerService {
       id: params.transaction_id,
     });
 
-    if (!transaction) {
-      return Result.fail(new NotFoundError('Transaction'));
+    if (transaction.err) {
+      return Err(transaction.val);
     }
 
-    if (transaction.user_id !== params.user_id) {
-      return Result.fail(new ForbiddenError());
+    if (!transaction) {
+      return Err(new NotFoundError('Transaction'));
     }
-    return Result.ok();
+
+    if (transaction.val?.user_id !== params.user_id) {
+      return Err(new ForbiddenError());
+    }
+    return Ok(undefined);
   }
 }

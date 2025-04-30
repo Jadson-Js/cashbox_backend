@@ -1,3 +1,5 @@
+import { Result, Err, Ok } from 'ts-results';
+
 import { prisma } from '../../../shared/prisma/client';
 import {
   FindTransactionByIdInput,
@@ -17,22 +19,32 @@ import {
 } from '../dtos/update-transaction.dto';
 import { DeleteTransactionInput } from '../dtos/delete-transaction.dto';
 
+import {
+  AppError,
+  InternalServerError,
+  NotFoundError,
+} from '../../../shared/utils/error';
+
 export interface TransactionRepository {
   findById(
     params: FindTransactionByIdInput,
-  ): Promise<FindTransactionByIdOutput | null>;
+  ): Promise<Result<FindTransactionByIdOutput | null, AppError>>;
   findByUserId(
     params: FindTransactionByUserIdInput,
-  ): Promise<FindTransactionByUserIdOutput[] | null>;
-  create(params: CreateTransactionInput): Promise<CreateTransactionOutput>;
-  update(params: UpdateTransactionInput): Promise<UpdateTransactionOutput>;
-  delete(params: DeleteTransactionInput): Promise<void>;
+  ): Promise<Result<FindTransactionByUserIdOutput[] | null, AppError>>;
+  create(
+    params: CreateTransactionInput,
+  ): Promise<Result<CreateTransactionOutput, AppError>>;
+  update(
+    params: UpdateTransactionInput,
+  ): Promise<Result<UpdateTransactionOutput, AppError>>;
+  delete(params: DeleteTransactionInput): Promise<Result<void, AppError>>;
 }
 
 export class PrismaTransactionRepository implements TransactionRepository {
   public async findById(
     params: FindTransactionByIdInput,
-  ): Promise<FindTransactionByIdOutput | null> {
+  ): Promise<Result<FindTransactionByIdOutput | null, AppError>> {
     const select = {
       id: true,
       amount: true,
@@ -44,25 +56,29 @@ export class PrismaTransactionRepository implements TransactionRepository {
       user_id: true,
       category_id: true,
     };
+    try {
+      const transaction = await prisma.transaction.findFirst({
+        where: { id: params.id },
+        select,
+      });
 
-    const transaction = await prisma.transaction.findFirst({
-      where: { id: params.id },
-      select,
-    });
+      if (!transaction) {
+        return Err(new NotFoundError('Transaction'));
+      }
 
-    if (!transaction) {
-      return null;
+      return Ok({
+        ...transaction,
+        type: transaction.type as FindTransactionByIdOutput['type'],
+      });
+    } catch (err: unknown) {
+      console.log(err);
+      return Err(new InternalServerError());
     }
-
-    return {
-      ...transaction,
-      type: transaction.type as FindTransactionByIdOutput['type'],
-    };
   }
 
   public async findByUserId(
     params: FindTransactionByUserIdInput,
-  ): Promise<FindTransactionByUserIdOutput[] | null> {
+  ): Promise<Result<FindTransactionByUserIdOutput[] | null, AppError>> {
     const select = {
       id: true,
       amount: true,
@@ -75,20 +91,27 @@ export class PrismaTransactionRepository implements TransactionRepository {
       category_id: true,
     };
 
-    const transactions = await prisma.transaction.findMany({
-      where: { user_id: params.user_id },
-      select,
-    });
+    try {
+      const transactions = await prisma.transaction.findMany({
+        where: { user_id: params.user_id },
+        select,
+      });
 
-    return transactions.map((transaction) => ({
-      ...transaction,
-      type: transaction.type as FindTransactionByUserIdOutput['type'],
-    }));
+      return Ok(
+        transactions.map((transaction) => ({
+          ...transaction,
+          type: transaction.type as FindTransactionByUserIdOutput['type'],
+        })),
+      );
+    } catch (err: unknown) {
+      console.log(err);
+      return Err(new InternalServerError());
+    }
   }
 
   public async create(
     params: CreateTransactionInput,
-  ): Promise<CreateTransactionOutput> {
+  ): Promise<Result<CreateTransactionOutput, AppError>> {
     const input = {
       amount: params.amount,
       type: params.type,
@@ -97,20 +120,24 @@ export class PrismaTransactionRepository implements TransactionRepository {
       category_id: params.category_id,
       user_id: params.user_id,
     };
+    try {
+      const transaction = await prisma.transaction.create({
+        data: input,
+      });
 
-    const transaction = await prisma.transaction.create({
-      data: input,
-    });
-
-    return {
-      ...transaction,
-      type: transaction.type as CreateTransactionOutput['type'],
-    };
+      return Ok({
+        ...transaction,
+        type: transaction.type as CreateTransactionOutput['type'],
+      });
+    } catch (err: unknown) {
+      console.log(err);
+      return Err(new InternalServerError());
+    }
   }
 
   public async update(
     params: UpdateTransactionInput,
-  ): Promise<UpdateTransactionOutput> {
+  ): Promise<Result<UpdateTransactionOutput, AppError>> {
     const input = {
       amount: params.amount,
       type: params.type,
@@ -118,21 +145,34 @@ export class PrismaTransactionRepository implements TransactionRepository {
       transaction_date: params.transaction_date,
       category_id: params.category_id,
     };
+    try {
+      const transaction = await prisma.transaction.update({
+        where: { id: params.id },
+        data: input,
+      });
 
-    const transaction = await prisma.transaction.update({
-      where: { id: params.id },
-      data: input,
-    });
-
-    return {
-      ...transaction,
-      type: transaction.type as UpdateTransactionOutput['type'],
-    };
+      return Ok({
+        ...transaction,
+        type: transaction.type as UpdateTransactionOutput['type'],
+      });
+    } catch (err: unknown) {
+      console.log(err);
+      return Err(new InternalServerError());
+    }
   }
 
-  public async delete(params: DeleteTransactionInput): Promise<void> {
-    await prisma.transaction.delete({
-      where: { id: params.id },
-    });
+  public async delete(
+    params: DeleteTransactionInput,
+  ): Promise<Result<void, AppError>> {
+    try {
+      await prisma.transaction.delete({
+        where: { id: params.id },
+      });
+
+      return Ok(undefined);
+    } catch (err: unknown) {
+      console.log(err);
+      return Err(new InternalServerError());
+    }
   }
 }

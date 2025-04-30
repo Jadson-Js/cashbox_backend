@@ -1,8 +1,12 @@
+import { Result, Err, Ok } from 'ts-results';
+
 import { TransactionRepository } from '../repositories/transaction.repository';
 import {
   CreateTransactionInput,
   CreateTransactionOutput,
 } from '../dtos/create-transaction.dto';
+
+import { AppError } from '../../../shared/utils/error';
 
 export class CreateTransactionService {
   public constructor(
@@ -11,8 +15,12 @@ export class CreateTransactionService {
 
   public async execute(
     params: CreateTransactionInput,
-  ): Promise<CreateTransactionOutput> {
+  ): Promise<Result<CreateTransactionOutput, AppError>> {
     const transaction = await this.transactionRepository.create(params);
+
+    if (transaction.err) {
+      return Err(transaction.val);
+    }
 
     return transaction;
   }
