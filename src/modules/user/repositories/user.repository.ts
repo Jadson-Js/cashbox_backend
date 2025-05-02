@@ -2,26 +2,26 @@ import { Result, Err, Ok } from 'ts-results';
 
 import { prisma } from '../../../shared/prisma/client';
 
-import { FindUserOutput } from '../dtos/find-user.dto';
+import { FindUsersOutput } from '../dtos/findUsers.dto';
 import {
-  FindByEmailUserInput,
-  FindByEmailUserOutput,
-} from '../dtos/findByEmail-user.dto';
-import { CreateUserInput, CreateUserOutput } from '../dtos/create-user.dto';
+  FindUserByEmailInput,
+  FindUserByEmailOutput,
+} from '../dtos/findUserByEmail.dto';
+import { CreateUserInput, CreateUserOutput } from '../dtos/createUser.dto';
 
 import { AppError, InternalServerError } from '../../../shared/utils/error';
 
 export interface UserRepository {
-  find(): Promise<FindUserOutput[] | null>;
+  find(): Promise<Result<FindUsersOutput[] | null, AppError>>;
   findByEmail(
-    params: FindByEmailUserInput,
-  ): Promise<FindByEmailUserOutput | null>;
+    params: FindUserByEmailInput,
+  ): Promise<Result<FindUserByEmailOutput | null, AppError>>;
   create(params: CreateUserInput): Promise<Result<CreateUserOutput, AppError>>;
-  delete(): Promise<void>;
+  delete(): Promise<Result<void, AppError>>;
 }
 
 export class PrismaUserRepository implements UserRepository {
-  public async find(): Promise<FindUserOutput[] | null> {
+  public async find(): Promise<Result<FindUsersOutput[] | null, AppError>> {
     const select = {
       id: true,
       email: true,
@@ -29,14 +29,20 @@ export class PrismaUserRepository implements UserRepository {
       updated_at: true,
     };
 
-    return prisma.user.findMany({
-      select,
-    });
+    try {
+      const users = await prisma.user.findMany({
+        select,
+      });
+      return Ok(users);
+    } catch (err: unknown) {
+      console.log(err);
+      return Err(new InternalServerError());
+    }
   }
 
   public async findByEmail(
-    params: FindByEmailUserInput,
-  ): Promise<FindByEmailUserOutput | null> {
+    params: FindUserByEmailInput,
+  ): Promise<Result<FindUserByEmailOutput | null, AppError>> {
     const select = {
       id: true,
       email: true,
@@ -44,11 +50,27 @@ export class PrismaUserRepository implements UserRepository {
       created_at: true,
       updated_at: true,
     };
+    try {
+      const user = await prisma.user.findFirst({
+        where: { email: params.email },
+        select,
+      });
 
-    return prisma.user.findFirst({
-      where: { email: params.email },
-      select,
-    });
+      if (!user) {
+        return Ok(null);
+      }
+
+      return Ok({
+        id: user.id,
+        email: user.email,
+        password: user.password,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+      });
+    } catch (err: unknown) {
+      console.log(err);
+      return Err(new InternalServerError());
+    }
   }
 
   public async create(
@@ -62,14 +84,27 @@ export class PrismaUserRepository implements UserRepository {
     try {
       const user = await prisma.user.create({ data: input });
 
-      return Ok({ id: user.id, email: user.email });
+      return Ok({
+        id: user.id,
+        email: user.email,
+        password: user.password,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+      });
     } catch (err: unknown) {
       console.log(err);
       return Err(new InternalServerError());
     }
   }
 
-  public async delete(): Promise<void> {
-    await prisma.user.deleteMany();
+  public async delete(): Promise<Result<void, AppError>> {
+    try {
+      await prisma.user.deleteMany();
+
+      return Ok(undefined);
+    } catch (err: unknown) {
+      console.log(err);
+      return Err(new InternalServerError());
+    }
   }
 }

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { FindUserService } from '../services/find-user.service';
-import { SignupUserService } from '../services/signup-user.service';
-import { LoginUserService } from '../services/login-user.service';
-import { DeleteUserService } from '../services/delete-user.service';
+import { FindUserService } from '../services/findUsers.service';
+import { SignupUserService } from '../services/signupUser.service';
+import { LoginUserService } from '../services/loginUser.service';
+import { DeleteUserService } from '../services/deleteUser.service';
 
 export class UserController {
   public constructor(
@@ -12,10 +12,16 @@ export class UserController {
     private readonly deleteUserService: DeleteUserService,
   ) {}
 
-  // DESATUALIZADO
   public async find(req: Request, res: Response): Promise<Response> {
     try {
       const response = await this.findUserService.execute();
+
+      if (response.err) {
+        return res
+          .status(response.val.statusCode)
+          .json({ error: response.val.message });
+      }
+
       return res.status(200).json(response);
     } catch (err: unknown) {
       const errorMessage =
@@ -61,7 +67,14 @@ export class UserController {
   // DESATUALIZADO
   public async delete(req: Request, res: Response): Promise<Response> {
     try {
-      await this.deleteUserService.execute();
+      const response = await this.deleteUserService.execute();
+
+      if (response.err) {
+        return res
+          .status(response.val.statusCode)
+          .json({ error: response.val.message });
+      }
+
       return res.status(204).send();
     } catch (err: unknown) {
       const errorMessage =

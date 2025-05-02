@@ -1,7 +1,8 @@
 import { Result, Err, Ok } from 'ts-results';
 
 import { UserRepository } from '../repositories/user.repository';
-import { LoginUserInput, LoginUserOutput } from '../dtos/login-user.dto';
+
+import { LoginUserInput, LoginUserOutput } from '../dtos/loginUser.dto';
 
 import {
   generateAccessToken,
@@ -22,13 +23,17 @@ export class LoginUserService {
   ): Promise<Result<LoginUserOutput, AppError>> {
     const user = await this.userRepository.findByEmail({ email: params.email });
 
-    if (!user) {
+    if (user.err) {
+      return Err(user.val);
+    }
+
+    if (!user.val) {
       return Err(new NotFoundError('User'));
     }
 
     const passwordIsValid = await comparePassword({
       password: params.password,
-      hashedPassword: user.password,
+      hashedPassword: user.val.password,
     });
 
     if (!passwordIsValid) {
@@ -36,10 +41,10 @@ export class LoginUserService {
     }
 
     return Ok({
-      id: user.id,
-      email: user.email,
-      accessToken: generateAccessToken(user.id),
-      refreshToken: generateRefreshToken(user.id),
+      id: user.val.id,
+      email: user.val.email,
+      accessToken: generateAccessToken(user.val.id),
+      refreshToken: generateRefreshToken(user.val.id),
     });
   }
 }

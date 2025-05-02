@@ -1,7 +1,7 @@
-import { FindUserService } from '../services/find-user.service';
-import { SignupUserService } from '../services/signup-user.service';
-import { LoginUserService } from '../services/login-user.service';
-import { DeleteUserService } from '../services/delete-user.service';
+import { FindUserService } from '../services/findUsers.service';
+import { SignupUserService } from '../services/signupUser.service';
+import { LoginUserService } from '../services/loginUser.service';
+import { DeleteUserService } from '../services/deleteUser.service';
 
 import { UserController } from '../controllers/user.controller';
 

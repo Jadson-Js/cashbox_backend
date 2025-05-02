@@ -1,9 +1,9 @@
-export interface CreateUserInput {
+export interface SignupUserInput {
   email: string;
   password: string;
 }
 
-export interface CreateUserOutput {
+export interface SignupUserOutput {
   id: string;
   email: string;
 }

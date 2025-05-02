@@ -1,20 +1,20 @@
 // IMPORT SERVICES
-import { FindUserService } from '../services/find-user.service';
-import { SignupUserService } from '../services/signup-user.service';
-import { LoginUserService } from '../services/login-user.service';
-import { DeleteUserService } from '../services/delete-user.service';
+import { FindUserService } from '../services/findUsers.service';
+import { SignupUserService } from '../services/signupUser.service';
+import { LoginUserService } from '../services/loginUser.service';
+import { DeleteUserService } from '../services/deleteUser.service';
 
 // IMPORT REPOSITORIES
 import { UserRepository } from '../repositories/user.repository';
 
 // IMPORT DTOS
-import { FindUserOutput } from '../dtos/find-user.dto';
-import { CreateUserInput, CreateUserOutput } from '../dtos/create-user.dto';
-import { LoginUserInput, LoginUserOutput } from '../dtos/login-user.dto';
+import { FindUserOutput } from '../dtos/findUsers.dto';
+import { CreateUserInput, CreateUserOutput } from '../dtos/createUser.dto';
+import { LoginUserInput, LoginUserOutput } from '../dtos/loginUser.dto';
 import {
   FindByEmailUserInput,
   FindByEmailUserOutput,
-} from '../dtos/findByEmail-user.dto';
+} from '../dtos/findUserByEmail.dto';
 
 // IMPOT UTILS
 import { hashPassword, comparePassword } from '../../../shared/utils/bcrypt';

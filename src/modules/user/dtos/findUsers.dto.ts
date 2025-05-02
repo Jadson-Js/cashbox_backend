@@ -1,4 +1,4 @@
-export interface FindUserOutput {
+export interface FindUsersOutput {
   id: string;
   email: string;
   created_at: Date;

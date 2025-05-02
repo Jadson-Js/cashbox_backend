@@ -1,7 +1,7 @@
 import { Result, Err, Ok } from 'ts-results';
 
 import { UserRepository } from '../repositories/user.repository';
-import { CreateUserInput, CreateUserOutput } from '../dtos/create-user.dto';
+import { SignupUserInput, SignupUserOutput } from '../dtos/signupUser.dto';
 
 import { hashPassword } from '../../../shared/utils/bcrypt';
 import { AppError } from '../../../shared/utils/error';
@@ -12,7 +12,7 @@ export class SignupUserService {
   public async execute({
     email,
     password,
-  }: CreateUserInput): Promise<Result<CreateUserOutput, AppError>> {
+  }: SignupUserInput): Promise<Result<SignupUserOutput, AppError>> {
     const passwordEncrypted = await hashPassword(password);
     const credentials = { email: email, password: passwordEncrypted };
 
@@ -22,6 +22,11 @@ export class SignupUserService {
       return Err(user.val);
     }
 
-    return user;
+    const response: SignupUserOutput = {
+      id: user.val.id,
+      email: user.val.email,
+    };
+
+    return Ok(response);
   }
 }

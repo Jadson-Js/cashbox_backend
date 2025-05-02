@@ -1,8 +1,9 @@
-export interface FindByEmailUserInput {
+export interface CreateUserInput {
   email: string;
+  password: string;
 }
 
-export interface FindByEmailUserOutput {
+export interface CreateUserOutput {
   id: string;
   email: string;
   password: string;
