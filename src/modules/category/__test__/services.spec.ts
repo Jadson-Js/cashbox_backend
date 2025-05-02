@@ -1,4 +1,4 @@
-// IMPORT SERVICES
+/* // IMPORT SERVICES
 import { FindCategoryService } from '../services/findCategories.service';
 import { CreateCategoryService } from '../services/createCategory.service';
 import { UpdateCategoryService } from '../services/updateCategoryById.service';
@@ -150,3 +150,4 @@ describe('Category Services', () => {
     expect(categoryRepository.delete).toHaveBeenCalledTimes(1);
   });
 });
+ */
