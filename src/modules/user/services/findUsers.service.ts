@@ -6,7 +6,7 @@ import { FindUsersOutput } from '../dtos/findUsers.dto';
 
 import { AppError } from '../../../shared/utils/error';
 
-export class FindUserService {
+export class FindUsersService {
   public constructor(private userRepository: UserRepository) {}
 
   public async execute(): Promise<Result<FindUsersOutput[] | null, AppError>> {

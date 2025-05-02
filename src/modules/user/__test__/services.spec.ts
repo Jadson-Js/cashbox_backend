@@ -2,7 +2,7 @@
 import { FindUserService } from '../services/findUsers.service';
 import { SignupUserService } from '../services/signupUser.service';
 import { LoginUserService } from '../services/loginUser.service';
-import { DeleteUserService } from '../services/deleteUser.service';
+import { DeleteUserService } from '../services/deleteUsers.service';
 
 // IMPORT REPOSITORIES
 import { UserRepository } from '../repositories/user.repository';

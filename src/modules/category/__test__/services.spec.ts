@@ -1,23 +1,23 @@
 // IMPORT SERVICES
-import { FindCategoryService } from '../services/find-category.service';
-import { CreateCategoryService } from '../services/create-category.service';
-import { UpdateCategoryService } from '../services/update-category.service';
-import { DeleteCategoryService } from '../services/delete-category.service';
+import { FindCategoryService } from '../services/findCategories.service';
+import { CreateCategoryService } from '../services/createCategory.service';
+import { UpdateCategoryService } from '../services/updateCategoryById.service';
+import { DeleteCategoryService } from '../services/deleteCategoryById.service';
 
 // IMPORT REPOSITORIES
 import { CategoryRepository } from '../repositories/category.repository';
 
 // IMPORT DTOS
-import { FindCategoryOutput } from '../dtos/find-category.dto';
+import { FindCategoryOutput } from '../dtos/findCategory.dto';
 import {
   CreateCategoryInput,
   CreateCategoryOutput,
-} from '../dtos/create-category.dto';
+} from '../dtos/createCategory.dto';
 import {
   UpdateCategoryInput,
   UpdateCategoryOutput,
-} from '../dtos/update-category.dto';
-import { DeleteCategoryInput } from '../dtos/delete-category.dto';
+} from '../dtos/updateCategoryById.dto';
+import { DeleteCategoryInput } from '../dtos/deleteCategoryById.dto';
 
 // IMPOT UTILS
 

@@ -1,20 +1,20 @@
 import { Request, Response } from 'express';
-import { FindUserService } from '../services/findUsers.service';
+import { FindUsersService } from '../services/findUsers.service';
 import { SignupUserService } from '../services/signupUser.service';
 import { LoginUserService } from '../services/loginUser.service';
-import { DeleteUserService } from '../services/deleteUser.service';
+import { DeleteUsersService } from '../services/deleteUsers.service';
 
 export class UserController {
   public constructor(
-    private readonly findUserService: FindUserService,
+    private readonly findUsersService: FindUsersService,
     private readonly signupUserService: SignupUserService,
     private readonly loginUserService: LoginUserService,
-    private readonly deleteUserService: DeleteUserService,
+    private readonly deleteUsersService: DeleteUsersService,
   ) {}
 
   public async find(req: Request, res: Response): Promise<Response> {
     try {
-      const response = await this.findUserService.execute();
+      const response = await this.findUsersService.execute();
 
       if (response.err) {
         return res
@@ -67,7 +67,7 @@ export class UserController {
   // DESATUALIZADO
   public async delete(req: Request, res: Response): Promise<Response> {
     try {
-      const response = await this.deleteUserService.execute();
+      const response = await this.deleteUsersService.execute();
 
       if (response.err) {
         return res

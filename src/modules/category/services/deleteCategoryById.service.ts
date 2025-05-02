@@ -1,15 +1,16 @@
 import { Result, Err, Ok } from 'ts-results';
 
 import { CategoryRepository } from '../repositories/category.repository';
-import { DeleteCategoryInput } from '../dtos/delete-category.dto';
+
+import { DeleteCategoryByIdInput } from '../dtos/deleteCategoryById.dto';
 
 import { AppError } from '../../../shared/utils/error';
 
-export class DeleteCategoryService {
+export class DeleteCategoryByIdService {
   public constructor(private categoryRepository: CategoryRepository) {}
 
   public async execute(
-    id: DeleteCategoryInput,
+    id: DeleteCategoryByIdInput,
   ): Promise<Result<void, AppError>> {
     const category = await this.categoryRepository.delete(id);
 

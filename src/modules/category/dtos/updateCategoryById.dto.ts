@@ -1,11 +1,11 @@
-export interface UpdateCategoryInput {
+export interface UpdateCategoryByIdInput {
   id: string;
   icon_svg: string;
   title: string;
   color: string;
 }
 
-export interface UpdateCategoryOutput {
+export interface UpdateCategoryByIdOutput {
   id: string;
   icon_svg: string;
   title: string;

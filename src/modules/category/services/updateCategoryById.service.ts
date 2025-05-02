@@ -2,19 +2,18 @@ import { Result, Err, Ok } from 'ts-results';
 
 import { CategoryRepository } from '../repositories/category.repository';
 import {
-  CreateCategoryInput,
-  CreateCategoryOutput,
-} from '../dtos/create-category.dto';
-
+  UpdateCategoryByIdInput,
+  UpdateCategoryByIdOutput,
+} from '../dtos/updateCategoryById.dto';
 import { AppError } from '../../../shared/utils/error';
 
-export class CreateCategoryService {
+export class UpdateCategoryByIdService {
   public constructor(private readonly categoryRepository: CategoryRepository) {}
 
   public async execute(
-    params: CreateCategoryInput,
-  ): Promise<Result<CreateCategoryOutput, AppError>> {
-    const category = await this.categoryRepository.create(params);
+    params: UpdateCategoryByIdInput,
+  ): Promise<Result<UpdateCategoryByIdOutput, AppError>> {
+    const category = await this.categoryRepository.update(params);
 
     if (category.err) {
       return Err(category.val);

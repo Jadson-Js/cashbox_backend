@@ -1,7 +1,7 @@
-import { FindCategoryService } from '../services/find-category.service';
-import { CreateCategoryService } from '../services/create-category.service';
-import { UpdateCategoryService } from '../services/update-category.service';
-import { DeleteCategoryService } from '../services/delete-category.service';
+import { FindCategoriesService } from '../services/findCategories.service';
+import { CreateCategoryService } from '../services/createCategory.service';
+import { UpdateCategoryByIdService } from '../services/updateCategoryById.service';
+import { DeleteCategoryByIdService } from '../services/deleteCategoryById.service';
 
 import { CategoryController } from '../controllers/category.controller';
 import { PrismaCategoryRepository } from '../repositories/category.repository';
@@ -9,16 +9,20 @@ import { PrismaCategoryRepository } from '../repositories/category.repository';
 export function makeCategoryController() {
   const categoryRepository = new PrismaCategoryRepository();
 
-  const findCategoryService = new FindCategoryService(categoryRepository);
+  const findCategoriesService = new FindCategoriesService(categoryRepository);
   const createCategoryService = new CreateCategoryService(categoryRepository);
-  const updateCategoryService = new UpdateCategoryService(categoryRepository);
-  const deleteCategoryService = new DeleteCategoryService(categoryRepository);
+  const updateCategoryByIdService = new UpdateCategoryByIdService(
+    categoryRepository,
+  );
+  const deleteCategoryByIdService = new DeleteCategoryByIdService(
+    categoryRepository,
+  );
 
   const categoryController = new CategoryController(
-    findCategoryService,
+    findCategoriesService,
     createCategoryService,
-    updateCategoryService,
-    deleteCategoryService,
+    updateCategoryByIdService,
+    deleteCategoryByIdService,
   );
 
   return categoryController;

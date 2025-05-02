@@ -1,7 +1,7 @@
-import { FindUserService } from '../services/findUsers.service';
+import { FindUsersService } from '../services/findUsers.service';
 import { SignupUserService } from '../services/signupUser.service';
 import { LoginUserService } from '../services/loginUser.service';
-import { DeleteUserService } from '../services/deleteUser.service';
+import { DeleteUsersService } from '../services/deleteUsers.service';
 
 import { UserController } from '../controllers/user.controller';
 
@@ -10,16 +10,16 @@ import { PrismaUserRepository } from '../repositories/user.repository';
 export function makeUserController() {
   const userRepository = new PrismaUserRepository();
 
-  const findUserService = new FindUserService(userRepository);
+  const findUsersService = new FindUsersService(userRepository);
   const signupUserService = new SignupUserService(userRepository);
   const loginUserService = new LoginUserService(userRepository);
-  const deleteUserService = new DeleteUserService(userRepository);
+  const deleteUsersService = new DeleteUsersService(userRepository);
 
   const userController = new UserController(
-    findUserService,
+    findUsersService,
     signupUserService,
     loginUserService,
-    deleteUserService,
+    deleteUsersService,
   );
 
   return userController;

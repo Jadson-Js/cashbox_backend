@@ -1,19 +1,19 @@
 import { Request, Response } from 'express';
-import { FindCategoryService } from '../services/find-category.service';
-import { CreateCategoryService } from '../services/create-category.service';
-import { UpdateCategoryService } from '../services/update-category.service';
-import { DeleteCategoryService } from '../services/delete-category.service';
+import { FindCategoriesService } from '../services/findCategories.service';
+import { CreateCategoryService } from '../services/createCategory.service';
+import { UpdateCategoryByIdService } from '../services/updateCategoryById.service';
+import { DeleteCategoryByIdService } from '../services/deleteCategoryById.service';
 
 export class CategoryController {
   public constructor(
-    private readonly findCategoryService: FindCategoryService,
+    private readonly findCategoriesService: FindCategoriesService,
     private readonly createCategoryService: CreateCategoryService,
-    private readonly updateCategoryService: UpdateCategoryService,
-    private readonly deleteCategoryService: DeleteCategoryService,
+    private readonly updateCategoryByIdService: UpdateCategoryByIdService,
+    private readonly deleteCategoryByIdService: DeleteCategoryByIdService,
   ) {}
 
   public async find(req: Request, res: Response): Promise<Response> {
-    const response = await this.findCategoryService.execute();
+    const response = await this.findCategoriesService.execute();
 
     if (response.err) {
       return res
@@ -50,7 +50,7 @@ export class CategoryController {
       color: req.body.color,
     };
 
-    const response = await this.updateCategoryService.execute(data);
+    const response = await this.updateCategoryByIdService.execute(data);
 
     if (response.err) {
       return res
@@ -66,7 +66,7 @@ export class CategoryController {
       id: req.params.id,
     };
 
-    const response = await this.deleteCategoryService.execute(data);
+    const response = await this.deleteCategoryByIdService.execute(data);
 
     if (response.err) {
       return res

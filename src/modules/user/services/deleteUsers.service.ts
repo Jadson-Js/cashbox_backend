@@ -4,7 +4,7 @@ import { UserRepository } from '../repositories/user.repository';
 
 import { AppError } from '../../../shared/utils/error';
 
-export class DeleteUserService {
+export class DeleteUsersService {
   public constructor(private userRepository: UserRepository) {}
 
   public async execute(): Promise<Result<void, AppError>> {

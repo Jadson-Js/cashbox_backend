@@ -1,16 +1,17 @@
 import { Result, Err, Ok } from 'ts-results';
 
 import { prisma } from '../../../shared/prisma/client';
-import { FindCategoryOutput } from '../dtos/find-category.dto';
+
+import { FindCategoryOutput } from '../dtos/findCategory.dto';
 import {
   CreateCategoryInput,
   CreateCategoryOutput,
-} from '../dtos/create-category.dto';
+} from '../dtos/createCategory.dto';
 import {
-  UpdateCategoryInput,
-  UpdateCategoryOutput,
-} from '../dtos/update-category.dto';
-import { DeleteCategoryInput } from '../dtos/delete-category.dto';
+  UpdateCategoryByIdInput,
+  UpdateCategoryByIdOutput,
+} from '../dtos/updateCategoryById.dto';
+import { DeleteCategoryByIdInput } from '../dtos/deleteCategoryById.dto';
 
 import { AppError, InternalServerError } from '../../../shared/utils/error';
 
@@ -20,9 +21,9 @@ export interface CategoryRepository {
     params: CreateCategoryInput,
   ): Promise<Result<CreateCategoryOutput, AppError>>;
   update(
-    params: UpdateCategoryInput,
-  ): Promise<Result<UpdateCategoryOutput, AppError>>;
-  delete(params: DeleteCategoryInput): Promise<Result<void, AppError>>;
+    params: UpdateCategoryByIdInput,
+  ): Promise<Result<UpdateCategoryByIdOutput, AppError>>;
+  delete(params: DeleteCategoryByIdInput): Promise<Result<void, AppError>>;
 }
 
 export class PrismaCategoryRepository implements CategoryRepository {
@@ -67,8 +68,8 @@ export class PrismaCategoryRepository implements CategoryRepository {
   }
 
   public async update(
-    params: UpdateCategoryInput,
-  ): Promise<Result<UpdateCategoryOutput, AppError>> {
+    params: UpdateCategoryByIdInput,
+  ): Promise<Result<UpdateCategoryByIdOutput, AppError>> {
     const input = {
       icon_svg: params.icon_svg,
       title: params.title,
@@ -88,7 +89,7 @@ export class PrismaCategoryRepository implements CategoryRepository {
   }
 
   public async delete(
-    params: DeleteCategoryInput,
+    params: DeleteCategoryByIdInput,
   ): Promise<Result<void, AppError>> {
     try {
       await prisma.category.delete({
