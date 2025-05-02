@@ -1,24 +1,26 @@
 import { Result, Err, Ok } from 'ts-results';
 
-import { TransactionRepository } from '../repositories/transaction.repository';
-
 import {
   AppError,
   NotFoundError,
   ForbiddenError,
 } from '../../../shared/utils/error';
+import { TransactionRepository } from '../repositories/transaction.repository';
 
 interface CheckTransactionOwnerInput {
   transaction_id: string;
   user_id: string;
-  transactionRepository: TransactionRepository;
 }
 
 export class CheckTransactionOwnerService {
+  public constructor(
+    private readonly transactionRepository: TransactionRepository,
+  ) {}
+
   public async execute(
     params: CheckTransactionOwnerInput,
   ): Promise<Result<void, AppError>> {
-    const transaction = await params.transactionRepository.findById({
+    const transaction = await this.transactionRepository.findById({
       id: params.transaction_id,
     });
 
@@ -33,6 +35,7 @@ export class CheckTransactionOwnerService {
     if (transaction.val?.user_id !== params.user_id) {
       return Err(new ForbiddenError());
     }
+
     return Ok(undefined);
   }
 }
