@@ -4,20 +4,20 @@ import { prisma } from '../../../shared/prisma/client';
 import {
   FindTransactionByIdInput,
   FindTransactionByIdOutput,
-} from '../dtos/findById-transaction.dto';
+} from '../dtos/findTransactionById.dto';
 import {
-  FindTransactionByUserIdInput,
-  FindTransactionByUserIdOutput,
-} from '../dtos/findByUserId-transaction.dto';
+  FindTransactionsByUserIdInput,
+  FindTransactionsByUserIdOutput,
+} from '../dtos/findTransactionsByUserId.dto';
 import {
   CreateTransactionInput,
   CreateTransactionOutput,
-} from '../dtos/create-transaction.dto';
+} from '../dtos/createTransaction.dto';
 import {
-  UpdateTransactionInput,
-  UpdateTransactionOutput,
-} from '../dtos/update-transaction.dto';
-import { DeleteTransactionInput } from '../dtos/delete-transaction.dto';
+  UpdateTransactionByIdInput,
+  UpdateTransactionByIdOutput,
+} from '../dtos/updateTransactionById.dto';
+import { DeleteTransactionByIdInput } from '../dtos/deleteTransactionById.dto';
 
 import {
   AppError,
@@ -30,15 +30,15 @@ export interface TransactionRepository {
     params: FindTransactionByIdInput,
   ): Promise<Result<FindTransactionByIdOutput | null, AppError>>;
   findByUserId(
-    params: FindTransactionByUserIdInput,
-  ): Promise<Result<FindTransactionByUserIdOutput[] | null, AppError>>;
+    params: FindTransactionsByUserIdInput,
+  ): Promise<Result<FindTransactionsByUserIdOutput[] | null, AppError>>;
   create(
     params: CreateTransactionInput,
   ): Promise<Result<CreateTransactionOutput, AppError>>;
   update(
-    params: UpdateTransactionInput,
-  ): Promise<Result<UpdateTransactionOutput, AppError>>;
-  delete(params: DeleteTransactionInput): Promise<Result<void, AppError>>;
+    params: UpdateTransactionByIdInput,
+  ): Promise<Result<UpdateTransactionByIdOutput, AppError>>;
+  delete(params: DeleteTransactionByIdInput): Promise<Result<void, AppError>>;
 }
 
 export class PrismaTransactionRepository implements TransactionRepository {
@@ -77,8 +77,8 @@ export class PrismaTransactionRepository implements TransactionRepository {
   }
 
   public async findByUserId(
-    params: FindTransactionByUserIdInput,
-  ): Promise<Result<FindTransactionByUserIdOutput[] | null, AppError>> {
+    params: FindTransactionsByUserIdInput,
+  ): Promise<Result<FindTransactionsByUserIdOutput[] | null, AppError>> {
     const select = {
       id: true,
       amount: true,
@@ -100,7 +100,7 @@ export class PrismaTransactionRepository implements TransactionRepository {
       return Ok(
         transactions.map((transaction) => ({
           ...transaction,
-          type: transaction.type as FindTransactionByUserIdOutput['type'],
+          type: transaction.type as FindTransactionsByUserIdOutput['type'],
         })),
       );
     } catch (err: unknown) {
@@ -136,8 +136,8 @@ export class PrismaTransactionRepository implements TransactionRepository {
   }
 
   public async update(
-    params: UpdateTransactionInput,
-  ): Promise<Result<UpdateTransactionOutput, AppError>> {
+    params: UpdateTransactionByIdInput,
+  ): Promise<Result<UpdateTransactionByIdOutput, AppError>> {
     const input = {
       amount: params.amount,
       type: params.type,
@@ -147,13 +147,13 @@ export class PrismaTransactionRepository implements TransactionRepository {
     };
     try {
       const transaction = await prisma.transaction.update({
-        where: { id: params.id },
+        where: { id: params.id, user_id: params.user_id },
         data: input,
       });
 
       return Ok({
         ...transaction,
-        type: transaction.type as UpdateTransactionOutput['type'],
+        type: transaction.type as UpdateTransactionByIdInput['type'],
       });
     } catch (err: unknown) {
       console.log(err);
@@ -162,11 +162,11 @@ export class PrismaTransactionRepository implements TransactionRepository {
   }
 
   public async delete(
-    params: DeleteTransactionInput,
+    params: DeleteTransactionByIdInput,
   ): Promise<Result<void, AppError>> {
     try {
       await prisma.transaction.delete({
-        where: { id: params.id },
+        where: { id: params.id, user_id: params.user_id },
       });
 
       return Ok(undefined);

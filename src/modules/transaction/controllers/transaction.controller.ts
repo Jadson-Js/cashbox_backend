@@ -1,21 +1,21 @@
 import { Request, Response } from 'express';
-import { FindTransactionByUserIdService } from '../services/findByUserId-transaction.service';
-import { CreateTransactionService } from '../services/create-transaction.service';
-import { UpdateTransactionService } from '../services/update-transaction.service';
-import { DeleteTransactionService } from '../services/delete-transaction.service';
+import { FindTransactionsByUserIdService } from '../services/findTransactionByUserId.service';
+import { CreateTransactionService } from '../services/createTransaction.service';
+import { UpdateTransactionByIdService } from '../services/updateTransactionById.service';
+import { DeleteTransactionByIdService } from '../services/deleteTransactionById.service';
 
 export class TransactionController {
   public constructor(
-    private readonly findTransactionByUserIdService: FindTransactionByUserIdService,
+    private readonly findTransactionsByUserIdService: FindTransactionsByUserIdService,
     private readonly createTransactionService: CreateTransactionService,
-    private readonly updateTransactionService: UpdateTransactionService,
-    private readonly deleteTransactionService: DeleteTransactionService,
+    private readonly updateTransactionByIdService: UpdateTransactionByIdService,
+    private readonly deleteTransactionByIdService: DeleteTransactionByIdService,
   ) {}
 
   public async findByUserId(req: Request, res: Response): Promise<Response> {
     const data = { user_id: req.user_id as string };
 
-    const response = await this.findTransactionByUserIdService.execute(data);
+    const response = await this.findTransactionsByUserIdService.execute(data);
 
     if (response.err) {
       return res
@@ -58,7 +58,7 @@ export class TransactionController {
       category_id: req.body.category_id,
     };
 
-    const response = await this.updateTransactionService.execute(data);
+    const response = await this.updateTransactionByIdService.execute(data);
 
     if (response.err) {
       return res
@@ -75,7 +75,7 @@ export class TransactionController {
       id: req.params.id,
     };
 
-    const response = await this.deleteTransactionService.execute(data);
+    const response = await this.deleteTransactionByIdService.execute(data);
 
     if (response.err) {
       return res

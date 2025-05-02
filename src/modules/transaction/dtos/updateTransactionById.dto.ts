@@ -1,7 +1,7 @@
 import { Decimal } from '@prisma/client/runtime/library';
 import { TransactionType } from '../models/transaction.model';
 
-export interface UpdateTransactionInput {
+export interface UpdateTransactionByIdInput {
   id: string;
   amount: Decimal;
   type: TransactionType;
@@ -11,7 +11,7 @@ export interface UpdateTransactionInput {
   category_id: string;
 }
 
-export interface UpdateTransactionOutput {
+export interface UpdateTransactionByIdOutput {
   id: string;
   amount: Decimal;
   type: TransactionType;
