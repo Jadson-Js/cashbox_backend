@@ -147,6 +147,7 @@ describe('UserController', () => {
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
+      send: jest.fn(),
     } as unknown as Response;
 
     const output = {};
