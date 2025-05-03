@@ -1,0 +1,25 @@
+
+Lidia: {
+  Nome: Lidia Abreu
+  CPF: 072.962.017-46
+  Nasc: 08/03/1974
+  CEP: 22260100
+  Num: 56
+  APTO: 101
+  Andar: 1
+}
+
+
+IRACEMA: {
+  CPF: 270.445.803-00
+  CVC: 739
+}
+
+ADELSON: {
+CPF:63366029749
+CVC: 122
+}
+
+JADSON {
+Renavam: 1323150525
+}

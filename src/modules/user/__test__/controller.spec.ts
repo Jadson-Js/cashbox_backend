@@ -9,8 +9,6 @@ import { FindUsersService } from '../services/findUsers.service';
 import { SignupUserService } from '../services/signupUser.service';
 import { LoginUserService } from '../services/loginUser.service';
 import { DeleteUsersService } from '../services/deleteUsers.service';
-import { password } from '../../../shared/middlewares/zod/user.schema';
-import { sign } from 'crypto';
 
 describe('UserController', () => {
   // DECLARE TYPES

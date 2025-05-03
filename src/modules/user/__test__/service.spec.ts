@@ -1,53 +1,53 @@
-/* // IMPORT SERVICES
-import { FindUserService } from '../services/findUsers.service';
+import { Result, Err, Ok } from 'ts-results';
+
+// IMPORT SERVICES
+import { FindUsersService } from '../services/findUsers.service';
 import { SignupUserService } from '../services/signupUser.service';
 import { LoginUserService } from '../services/loginUser.service';
-import { DeleteUserService } from '../services/deleteUsers.service';
+import { DeleteUsersService } from '../services/deleteUsers.service';
 
 // IMPORT REPOSITORIES
 import { UserRepository } from '../repositories/user.repository';
 
 // IMPORT DTOS
-import { FindUserOutput } from '../dtos/findUsers.dto';
-import { CreateUserInput, CreateUserOutput } from '../dtos/createUser.dto';
-import { LoginUserInput, LoginUserOutput } from '../dtos/loginUser.dto';
+import { FindUsersOutput } from '../dtos/findUsers.dto';
 import {
-  FindByEmailUserInput,
-  FindByEmailUserOutput,
+  FindUserByEmailInput,
+  FindUserByEmailOutput,
 } from '../dtos/findUserByEmail.dto';
+import { CreateUserInput, CreateUserOutput } from '../dtos/createUser.dto';
+import { SignupUserInput, SignupUserOutput } from '../dtos/signupUser.dto';
+import { LoginUserInput, LoginUserOutput } from '../dtos/loginUser.dto';
 
 // IMPOT UTILS
 import { hashPassword, comparePassword } from '../../../shared/utils/bcrypt';
+
 import {
   generateAccessToken,
   generateRefreshToken,
 } from '../../../shared/utils/jwt';
+import { AppError } from '../../../shared/utils/error';
 
 // MOCKS
-jest.mock('../repositories/user.repository');
 jest.mock('../../../shared/utils/bcrypt', () => ({
-  hashPassword: jest.fn().mockResolvedValue('hashed_password_123'),
-  comparePassword: jest.fn().mockResolvedValue(true),
+  hashPassword: jest.fn(),
+  comparePassword: jest.fn(),
 }));
 jest.mock('../../../shared/utils/jwt', () => ({
-  generateAccessToken: jest.fn().mockReturnValue('access_token_123'),
-  generateRefreshToken: jest.fn().mockReturnValue('refresh_token_123'),
-}));
-jest.mock('bcryptjs', () => ({
-  comparePassword: jest.fn(),
+  generateAccessToken: jest.fn(),
+  generateRefreshToken: jest.fn(),
 }));
 
 describe('User Services', () => {
   // SETUP
-  let findUserService: FindUserService;
+  let findUsersService: FindUsersService;
   let signupUserService: SignupUserService;
   let loginUserService: LoginUserService;
-  let deleteUserService: DeleteUserService;
+  let deleteUsersService: DeleteUsersService;
 
   let userRepository: jest.Mocked<UserRepository>;
 
   beforeEach(() => {
-    jest.clearAllMocks();
     userRepository = {
       find: jest.fn(),
       findByEmail: jest.fn(),
@@ -55,70 +55,70 @@ describe('User Services', () => {
       delete: jest.fn(),
     } as jest.Mocked<UserRepository>;
 
-    findUserService = new FindUserService(userRepository);
+    findUsersService = new FindUsersService(userRepository);
     signupUserService = new SignupUserService(userRepository);
     loginUserService = new LoginUserService(userRepository);
-    deleteUserService = new DeleteUserService(userRepository);
+    deleteUsersService = new DeleteUsersService(userRepository);
   });
 
-  it('should return all users', async () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should find all users when repository succeeds', async () => {
     // ARRANGE
-    const users: FindUserOutput[] = [
+    const output: FindUsersOutput[] = [
       {
         id: '1',
         email: 'test@test.com',
         created_at: new Date(),
         updated_at: new Date(),
       },
-      {
-        id: '2',
-        email: 'test2@test.com',
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
     ];
 
     // ACT
-    userRepository.find = jest.fn().mockResolvedValue(users);
-    const result = await findUserService.execute();
+    userRepository.find = jest.fn().mockResolvedValue(output);
+    const result = await findUsersService.execute();
 
     // ASSERT
     expect(result).toBeInstanceOf(Array);
-    expect(result).toHaveLength(2);
-    expect(result).toEqual(users);
+    expect(result).toHaveLength(1);
+    expect(result).toEqual(output);
     expect(userRepository.find).toHaveBeenCalledTimes(1);
   });
 
-  it('should create a user', async () => {
+  it('should signup user when repository succeeds', async () => {
     // ARRANGE
-    const input: CreateUserInput = {
+    const input: SignupUserInput = {
       email: 'test@test.com',
       password: 'test',
     };
 
-    const inputFormated: CreateUserInput = {
+    const inputFormated: SignupUserInput = {
       email: 'test@test.com',
       password: 'hashed_password_123',
     };
 
-    const output: CreateUserOutput = {
+    const output: SignupUserOutput = {
       id: '1',
       email: 'test@test.com',
     };
 
     // ACT
-    userRepository.create = jest.fn().mockResolvedValue(output);
+    (hashPassword as jest.Mock).mockResolvedValue('hashed_password_123');
+    userRepository.create = jest.fn().mockResolvedValue(Ok(output));
+
     const result = await signupUserService.execute(input);
 
     // ASSERT
-    expect(result).toEqual(output);
+    expect(result.val).toEqual(output);
     expect(userRepository.create).toHaveBeenCalledTimes(1);
     expect(userRepository.create).toHaveBeenCalledWith(inputFormated);
     expect(hashPassword).toHaveBeenCalledTimes(1);
     expect(hashPassword).toHaveBeenCalledWith(input.password);
   });
 
-  it('should login a user', async () => {
+  it('should login user when repository succeeds', async () => {
     // ARRANGE
     const input: LoginUserInput = {
       email: 'test@test.com',
@@ -131,10 +131,10 @@ describe('User Services', () => {
       refreshToken: 'refresh_token_123',
     };
 
-    const inputFindByEmail: FindByEmailUserInput = {
+    const inputFindByEmail: FindUserByEmailInput = {
       email: 'test@test.com',
     };
-    const outputFindByEmail: FindByEmailUserOutput = {
+    const outputFindByEmail: FindUserByEmailOutput = {
       id: '1',
       email: 'test@test.com',
       password: 'hashed_password_123',
@@ -143,15 +143,17 @@ describe('User Services', () => {
     };
 
     // ACT
-    userRepository.findByEmail = jest.fn().mockResolvedValue(outputFindByEmail);
+    userRepository.findByEmail = jest
+      .fn()
+      .mockResolvedValue(Ok(outputFindByEmail));
     (comparePassword as jest.Mock).mockResolvedValue(true);
     (generateAccessToken as jest.Mock).mockReturnValue('access_token_123');
     (generateRefreshToken as jest.Mock).mockReturnValue('refresh_token_123');
+
     const result = await loginUserService.execute(input);
 
     // ASSERT
-    console.log(result);
-    expect(result.value).toEqual(output);
+    expect(result.val).toEqual(output);
     expect(userRepository.findByEmail).toHaveBeenCalledTimes(1);
     expect(userRepository.findByEmail).toHaveBeenCalledWith(inputFindByEmail);
     expect(comparePassword).toHaveBeenCalledTimes(1);
@@ -168,11 +170,11 @@ describe('User Services', () => {
   it('should delete all users', async () => {
     // ARRANGE
     // ACT
-    userRepository.delete = jest.fn().mockResolvedValue(null);
-    const result = await deleteUserService.execute();
+    userRepository.delete = jest.fn().mockResolvedValue(Ok(undefined));
+    const result = await deleteUsersService.execute();
+    console.log(result);
     // ASSERT
-    expect(result).toBeUndefined();
+    expect(result.val).toBeUndefined();
     expect(userRepository.delete).toHaveBeenCalledTimes(1);
   });
 });
- */
