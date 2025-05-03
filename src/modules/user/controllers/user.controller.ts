@@ -44,7 +44,7 @@ export class UserController {
         .json({ error: response.val.message });
     }
 
-    return res.status(201).json({ response });
+    return res.status(201).json(response);
   }
 
   public async login(req: Request, res: Response): Promise<Response> {
@@ -61,7 +61,7 @@ export class UserController {
         .json({ error: response.val.message });
     }
 
-    return res.status(201).json({ response });
+    return res.status(201).json(response);
   }
 
   // DESATUALIZADO
