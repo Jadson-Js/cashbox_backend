@@ -61,7 +61,7 @@ export class UserController {
         .json({ error: response.val.message });
     }
 
-    return res.status(201).json(response);
+    return res.status(200).json(response);
   }
 
   // DESATUALIZADO

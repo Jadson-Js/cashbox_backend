@@ -44,7 +44,7 @@ describe('UserController', () => {
     jest.clearAllMocks();
   });
 
-  it('should return a list of users with status 200 when service succeeds', async () => {
+  it('should find all users with status 200 when service succeeds', async () => {
     // ARRANGE
     const req = {} as Request;
 
@@ -76,7 +76,7 @@ describe('UserController', () => {
     expect(res.json).toHaveBeenCalledWith(output);
   });
 
-  it('should return user registered with status 201 when service succeeds', async () => {
+  it('should signup user with status 201 when service succeeds', async () => {
     // ARRANGE
     const req = {
       body: { email: 'test@test.com', password: 'test' },
@@ -105,5 +105,58 @@ describe('UserController', () => {
     expect(signupUserService.execute).toHaveBeenCalledWith(req.body);
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith(output);
+  });
+
+  it('should login user with status 200 when service succeeds', async () => {
+    // ARRANGE
+    const req = {
+      body: { email: 'test@test.com', password: 'test' },
+    } as unknown as Request;
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as unknown as Response;
+
+    const output = {
+      ok: true,
+      err: false,
+      val: {
+        id: '1',
+        email: 'test@test.com',
+        accessToken: 'TOKEN',
+        refreshToken: 'TOKEN',
+      },
+    };
+
+    // ACT
+    (loginUserService.execute as jest.Mock).mockResolvedValue(output);
+    await userController.login(req, res);
+
+    // ASSERT
+    expect(loginUserService.execute).toHaveBeenCalledTimes(1);
+    expect(loginUserService.execute).toHaveBeenCalledWith(req.body);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(output);
+  });
+
+  it('should delete all users with status 204 when service succeeds', async () => {
+    // ARRANGE
+    const req = {} as unknown as Request;
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as unknown as Response;
+
+    const output = {};
+
+    // ACT
+    (deleteUsersService.execute as jest.Mock).mockResolvedValue(output);
+    await userController.delete(req, res);
+
+    // ASSERT
+    expect(deleteUsersService.execute).toHaveBeenCalledTimes(1);
+    expect(res.status).toHaveBeenCalledWith(204);
   });
 });
