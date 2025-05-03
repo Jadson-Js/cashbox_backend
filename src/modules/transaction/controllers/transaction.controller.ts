@@ -44,7 +44,7 @@ export class TransactionController {
         .json({ error: response.val.message });
     }
 
-    return res.status(201).json({ response });
+    return res.status(201).json(response);
   }
 
   public async update(req: Request, res: Response): Promise<Response> {
@@ -66,7 +66,7 @@ export class TransactionController {
         .json({ error: response.val.message });
     }
 
-    return res.status(200).json({ response });
+    return res.status(200).json(response);
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
@@ -83,6 +83,6 @@ export class TransactionController {
         .json({ error: response.val.message });
     }
 
-    return res.status(204).json({ response });
+    return res.status(204).json(response);
   }
 }
