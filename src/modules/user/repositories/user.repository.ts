@@ -51,7 +51,7 @@ export class PrismaUserRepository implements UserRepository {
       updated_at: true,
     };
     try {
-      const user = await prisma.user.findFirst({
+      const user = await prisma.user.findUnique({
         where: { email: params.email },
         select,
       });

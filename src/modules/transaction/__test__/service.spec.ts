@@ -94,6 +94,7 @@ describe('Transaction Services', () => {
     const result = await findTransactionService.execute(input);
 
     // ASSERT
+    expect(result.ok).toBe(true);
     expect(result.val).toEqual(output);
     expect(transactionRepository.findByUserId).toHaveBeenCalledTimes(1);
     expect(transactionRepository.findByUserId).toHaveBeenCalledWith(input);
@@ -127,6 +128,7 @@ describe('Transaction Services', () => {
     const result = await createTransactionService.execute(input);
 
     // ASSERT
+    expect(result.ok).toBe(true);
     expect(result.val).toEqual(output);
     expect(transactionRepository.create).toHaveBeenCalledTimes(1);
     expect(transactionRepository.create).toHaveBeenCalledWith(input);
@@ -161,6 +163,7 @@ describe('Transaction Services', () => {
     const result = await updateTransactionService.execute(input);
 
     // ASSERT
+    expect(result.ok).toBe(true);
     expect(result.val).toEqual(output);
     expect(transactionRepository.update).toHaveBeenCalledTimes(1);
     expect(transactionRepository.update).toHaveBeenCalledWith(input);

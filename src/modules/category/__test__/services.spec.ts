@@ -66,6 +66,7 @@ describe('Category Services', () => {
     const result = await findCategoryService.execute();
 
     // ASSERT
+    expect(result.ok).toBe(true);
     expect(result.val).toEqual(output);
     expect(categoryRepository.find).toHaveBeenCalledTimes(1);
   });
@@ -92,6 +93,7 @@ describe('Category Services', () => {
     const result = await createCategoryService.execute(input);
 
     // ASSERT
+    expect(result.ok).toBe(true);
     expect(result.val).toEqual(output);
     expect(categoryRepository.create).toHaveBeenCalledTimes(1);
     expect(categoryRepository.create).toHaveBeenCalledWith(input);
@@ -120,6 +122,7 @@ describe('Category Services', () => {
     const result = await updateCategoryService.execute(input);
 
     // ASSERT
+    expect(result.ok).toBe(true);
     expect(result.val).toEqual(output);
     expect(categoryRepository.update).toHaveBeenCalledTimes(1);
     expect(categoryRepository.update).toHaveBeenCalledWith(input);

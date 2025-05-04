@@ -28,14 +28,8 @@ import {
 } from '../../../shared/utils/jwt';
 
 // MOCKS
-jest.mock('../../../shared/utils/bcrypt', () => ({
-  hashPassword: jest.fn(),
-  comparePassword: jest.fn(),
-}));
-jest.mock('../../../shared/utils/jwt', () => ({
-  generateAccessToken: jest.fn(),
-  generateRefreshToken: jest.fn(),
-}));
+jest.mock('../../../shared/utils/bcrypt');
+jest.mock('../../../shared/utils/jwt');
 
 describe('User Services', () => {
   // SETUP
@@ -58,6 +52,11 @@ describe('User Services', () => {
     signupUserService = new SignupUserService(userRepository);
     loginUserService = new LoginUserService(userRepository);
     deleteUsersService = new DeleteUsersService(userRepository);
+
+    (hashPassword as jest.Mock).mockReturnValue('hashed_password_123');
+    (comparePassword as jest.Mock).mockReturnValue(true);
+    (generateAccessToken as jest.Mock).mockReturnValue('access_token_123');
+    (generateRefreshToken as jest.Mock).mockReturnValue('refresh_token_123');
   });
 
   afterEach(() => {
@@ -110,6 +109,8 @@ describe('User Services', () => {
     const result = await signupUserService.execute(input);
 
     // ASSERT
+
+    expect(result.ok).toBe(true);
     expect(result.val).toEqual(output);
     expect(userRepository.create).toHaveBeenCalledTimes(1);
     expect(userRepository.create).toHaveBeenCalledWith(inputFormated);
@@ -152,6 +153,7 @@ describe('User Services', () => {
     const result = await loginUserService.execute(input);
 
     // ASSERT
+    expect(result.ok).toBe(true);
     expect(result.val).toEqual(output);
     expect(userRepository.findByEmail).toHaveBeenCalledTimes(1);
     expect(userRepository.findByEmail).toHaveBeenCalledWith(inputFindByEmail);

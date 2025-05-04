@@ -57,7 +57,7 @@ export class PrismaTransactionRepository implements TransactionRepository {
       category_id: true,
     };
     try {
-      const transaction = await prisma.transaction.findFirst({
+      const transaction = await prisma.transaction.findUnique({
         where: { id: params.id },
         select,
       });
