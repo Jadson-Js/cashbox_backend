@@ -26,7 +26,6 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from '../../../shared/utils/jwt';
-import { AppError } from '../../../shared/utils/error';
 
 // MOCKS
 jest.mock('../../../shared/utils/bcrypt', () => ({
@@ -172,7 +171,6 @@ describe('User Services', () => {
     // ACT
     userRepository.delete = jest.fn().mockResolvedValue(Ok(undefined));
     const result = await deleteUsersService.execute();
-    console.log(result);
     // ASSERT
     expect(result.val).toBeUndefined();
     expect(userRepository.delete).toHaveBeenCalledTimes(1);

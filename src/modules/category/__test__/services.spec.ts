@@ -1,8 +1,10 @@
-/* // IMPORT SERVICES
-import { FindCategoryService } from '../services/findCategories.service';
+import { Result, Err, Ok } from 'ts-results';
+
+// IMPORT SERVICES
+import { FindCategoriesService } from '../services/findCategories.service';
 import { CreateCategoryService } from '../services/createCategory.service';
-import { UpdateCategoryService } from '../services/updateCategoryById.service';
-import { DeleteCategoryService } from '../services/deleteCategoryById.service';
+import { UpdateCategoryByIdService } from '../services/updateCategoryById.service';
+import { DeleteCategoryByIdService } from '../services/deleteCategoryById.service';
 
 // IMPORT REPOSITORIES
 import { CategoryRepository } from '../repositories/category.repository';
@@ -14,27 +16,21 @@ import {
   CreateCategoryOutput,
 } from '../dtos/createCategory.dto';
 import {
-  UpdateCategoryInput,
-  UpdateCategoryOutput,
+  UpdateCategoryByIdInput,
+  UpdateCategoryByIdOutput,
 } from '../dtos/updateCategoryById.dto';
-import { DeleteCategoryInput } from '../dtos/deleteCategoryById.dto';
-
-// IMPOT UTILS
-
-// MOCKS
-jest.mock('../repositories/category.repository');
+import { DeleteCategoryByIdInput } from '../dtos/deleteCategoryById.dto';
 
 describe('Category Services', () => {
   // SETUP
-  let findCategoryService: FindCategoryService;
+  let findCategoryService: FindCategoriesService;
   let createCategoryService: CreateCategoryService;
-  let updateCategoryService: UpdateCategoryService;
-  let deleteCategoryService: DeleteCategoryService;
+  let updateCategoryService: UpdateCategoryByIdService;
+  let deleteCategoryService: DeleteCategoryByIdService;
 
   let categoryRepository: jest.Mocked<CategoryRepository>;
 
   beforeEach(() => {
-    jest.clearAllMocks();
     categoryRepository = {
       find: jest.fn(),
       create: jest.fn(),
@@ -42,25 +38,21 @@ describe('Category Services', () => {
       delete: jest.fn(),
     } as jest.Mocked<CategoryRepository>;
 
-    findCategoryService = new FindCategoryService(categoryRepository);
+    findCategoryService = new FindCategoriesService(categoryRepository);
     createCategoryService = new CreateCategoryService(categoryRepository);
-    updateCategoryService = new UpdateCategoryService(categoryRepository);
-    deleteCategoryService = new DeleteCategoryService(categoryRepository);
+    updateCategoryService = new UpdateCategoryByIdService(categoryRepository);
+    deleteCategoryService = new DeleteCategoryByIdService(categoryRepository);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should return all categories', async () => {
     // ARRANGE
-    const categories: FindCategoryOutput[] = [
+    const output: FindCategoryOutput[] = [
       {
         id: '1',
-        icon_svg: 'svg',
-        title: 'titulo',
-        color: 'color',
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        id: '2',
         icon_svg: 'svg',
         title: 'titulo',
         color: 'color',
@@ -70,13 +62,11 @@ describe('Category Services', () => {
     ];
 
     // ACT
-    categoryRepository.find = jest.fn().mockResolvedValue(categories);
+    categoryRepository.find = jest.fn().mockResolvedValue(Ok(output));
     const result = await findCategoryService.execute();
 
     // ASSERT
-    expect(result).toBeInstanceOf(Array);
-    expect(result).toHaveLength(2);
-    expect(result).toEqual(categories);
+    expect(result.val).toEqual(output);
     expect(categoryRepository.find).toHaveBeenCalledTimes(1);
   });
 
@@ -98,25 +88,25 @@ describe('Category Services', () => {
     };
 
     // ACT
-    categoryRepository.create = jest.fn().mockResolvedValue(output);
+    categoryRepository.create = jest.fn().mockResolvedValue(Ok(output));
     const result = await createCategoryService.execute(input);
 
     // ASSERT
-    expect(result).toEqual(output);
+    expect(result.val).toEqual(output);
     expect(categoryRepository.create).toHaveBeenCalledTimes(1);
     expect(categoryRepository.create).toHaveBeenCalledWith(input);
   });
 
   it('should update a category', async () => {
     // ARRANGE
-    const input: UpdateCategoryInput = {
+    const input: UpdateCategoryByIdInput = {
       id: '1',
       icon_svg: 'svg',
       title: 'title',
       color: 'red',
     };
 
-    const output: UpdateCategoryOutput = {
+    const output: UpdateCategoryByIdOutput = {
       id: '1',
       icon_svg: 'svg',
       title: 'title',
@@ -126,28 +116,27 @@ describe('Category Services', () => {
     };
 
     // ACT
-    categoryRepository.update = jest.fn().mockResolvedValue(output);
+    categoryRepository.update = jest.fn().mockResolvedValue(Ok(output));
     const result = await updateCategoryService.execute(input);
 
     // ASSERT
-    expect(result).toEqual(output);
+    expect(result.val).toEqual(output);
     expect(categoryRepository.update).toHaveBeenCalledTimes(1);
     expect(categoryRepository.update).toHaveBeenCalledWith(input);
   });
 
   it('should delete all categories', async () => {
     // ARRANGE
-    const input: DeleteCategoryInput = {
+    const input: DeleteCategoryByIdInput = {
       id: '1',
     };
 
     // ACT
-    categoryRepository.delete = jest.fn().mockResolvedValue(null);
+    categoryRepository.delete = jest.fn().mockResolvedValue(Ok(undefined));
     const result = await deleteCategoryService.execute(input);
 
     // ASSERT
-    expect(result).toBeUndefined();
+    expect(result.val).toBeUndefined();
     expect(categoryRepository.delete).toHaveBeenCalledTimes(1);
   });
 });
- */
