@@ -26,9 +26,9 @@ export class CategoryController {
 
   public async create(req: Request, res: Response): Promise<Response> {
     const data = {
-      icon_svg: req.body.icon_svg,
+      icon_name: req.body.icon_name,
       title: req.body.title,
-      color: req.body.color,
+      icon_color: req.body.icon_color,
     };
 
     const response = await this.createCategoryService.execute(data);
@@ -45,9 +45,9 @@ export class CategoryController {
   public async update(req: Request, res: Response): Promise<Response> {
     const data = {
       id: req.params.id,
-      icon_svg: req.body.icon_svg,
+      icon_name: req.body.icon_name,
       title: req.body.title,
-      color: req.body.color,
+      icon_color: req.body.icon_color,
     };
 
     const response = await this.updateCategoryByIdService.execute(data);

@@ -53,9 +53,9 @@ describe('Category Services', () => {
     const output: FindCategoryOutput[] = [
       {
         id: '1',
-        icon_svg: 'svg',
+        icon_name: 'svg',
         title: 'titulo',
-        color: 'color',
+        icon_color: 'icon_color',
         created_at: new Date(),
         updated_at: new Date(),
       },
@@ -74,16 +74,16 @@ describe('Category Services', () => {
   it('should create a category', async () => {
     // ARRANGE
     const input: CreateCategoryInput = {
-      icon_svg: 'svg',
+      icon_name: 'svg',
       title: 'title',
-      color: 'color',
+      icon_color: 'icon_color',
     };
 
     const output: CreateCategoryOutput = {
       id: '1',
-      icon_svg: 'svg',
+      icon_name: 'svg',
       title: 'title',
-      color: 'color',
+      icon_color: 'icon_color',
       created_at: new Date(),
       updated_at: new Date(),
     };
@@ -103,16 +103,16 @@ describe('Category Services', () => {
     // ARRANGE
     const input: UpdateCategoryByIdInput = {
       id: '1',
-      icon_svg: 'svg',
+      icon_name: 'svg',
       title: 'title',
-      color: 'red',
+      icon_color: 'red',
     };
 
     const output: UpdateCategoryByIdOutput = {
       id: '1',
-      icon_svg: 'svg',
+      icon_name: 'svg',
       title: 'title',
-      color: 'red',
+      icon_color: 'red',
       created_at: new Date(),
       updated_at: new Date(),
     };

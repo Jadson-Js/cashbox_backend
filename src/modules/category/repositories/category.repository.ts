@@ -30,9 +30,9 @@ export class PrismaCategoryRepository implements CategoryRepository {
   public async find(): Promise<Result<FindCategoryOutput[] | null, AppError>> {
     const select = {
       id: true,
-      icon_svg: true,
+      icon_name: true,
       title: true,
-      color: true,
+      icon_color: true,
       created_at: true,
       updated_at: true,
     };
@@ -52,9 +52,9 @@ export class PrismaCategoryRepository implements CategoryRepository {
     params: CreateCategoryInput,
   ): Promise<Result<CreateCategoryOutput, AppError>> {
     const input = {
-      icon_svg: params.icon_svg,
+      icon_name: params.icon_name,
       title: params.title,
-      color: params.color,
+      icon_color: params.icon_color,
     };
 
     try {
@@ -71,9 +71,9 @@ export class PrismaCategoryRepository implements CategoryRepository {
     params: UpdateCategoryByIdInput,
   ): Promise<Result<UpdateCategoryByIdOutput, AppError>> {
     const input = {
-      icon_svg: params.icon_svg,
+      icon_name: params.icon_name,
       title: params.title,
-      color: params.color,
+      icon_color: params.icon_color,
     };
     try {
       const category = await prisma.category.update({

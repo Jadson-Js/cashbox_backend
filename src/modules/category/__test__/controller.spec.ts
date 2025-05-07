@@ -61,9 +61,9 @@ describe('CategoryController', () => {
       val: [
         {
           id: '1',
-          icon_svg: 'Chapeu',
+          icon_name: 'Chapeu',
           title: 'Agiota',
-          color: 'VERDE',
+          icon_color: 'VERDE',
           created_at: '2025-01-01T01:01:01.000A',
           updated_at: '2025-01-01T01:01:01.000A',
         },
@@ -84,9 +84,9 @@ describe('CategoryController', () => {
     // ARRANGE
     const req = {
       body: {
-        icon_svg: 'SVG',
+        icon_name: 'SVG',
         title: 'TITLE',
-        color: 'COLOR',
+        icon_color: 'icon_color',
       },
     } as unknown as Request;
 
@@ -100,9 +100,9 @@ describe('CategoryController', () => {
       err: false,
       val: {
         id: '1',
-        icon_svg: 'SVG',
+        icon_name: 'SVG',
         title: 'TITLE',
-        color: 'COLOR',
+        icon_color: 'icon_color',
         created_at: '2025-01-01T01:01:01.000A',
         updated_at: '2025-01-01T01:01:01.000A',
       },
@@ -126,9 +126,9 @@ describe('CategoryController', () => {
         id: '1',
       },
       body: {
-        icon_svg: 'SVG_EDITED',
+        icon_name: 'SVG_EDITED',
         title: 'TITLE_EDITED',
-        color: 'COLOR_EDITED',
+        icon_color: 'COLOR_EDITED',
       },
     } as unknown as Request;
 
@@ -142,9 +142,9 @@ describe('CategoryController', () => {
       err: false,
       val: {
         id: '1',
-        icon_svg: 'SVG_EDITED',
+        icon_name: 'SVG_EDITED',
         title: 'TITLE_EDITED',
-        color: 'COLOR_EDITED',
+        icon_color: 'COLOR_EDITED',
         created_at: '2025-01-01T01:01:01.000A',
         updated_at: '2025-01-01T01:01:01.000A',
       },

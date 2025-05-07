@@ -1,8 +1,8 @@
 export interface Category {
   id: String;
-  icon_svg: String;
+  icon_name: String;
   title: String;
-  color: String;
+  icon_color: String;
   created_at: Date;
   updated_at: Date;
 }

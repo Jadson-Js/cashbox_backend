@@ -48,17 +48,17 @@ describe('CategoryPrismaRepository', () => {
       const output: FindCategoryOutput[] = [
         {
           id: '1',
-          icon_svg: 'svg',
+          icon_name: 'svg',
           title: 'title',
-          color: 'color',
+          icon_color: 'icon_color',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
           id: '2',
-          icon_svg: 'svg',
+          icon_name: 'svg',
           title: 'title',
-          color: 'color',
+          icon_color: 'icon_color',
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -66,9 +66,9 @@ describe('CategoryPrismaRepository', () => {
 
       const select = {
         id: true,
-        icon_svg: true,
+        icon_name: true,
         title: true,
-        color: true,
+        icon_color: true,
         created_at: true,
         updated_at: true,
       };
@@ -88,16 +88,16 @@ describe('CategoryPrismaRepository', () => {
     it('should create  category when successful', async () => {
       // Arrange
       const input: CreateCategoryInput = {
-        icon_svg: 'svg',
+        icon_name: 'svg',
         title: 'title',
-        color: 'color',
+        icon_color: 'icon_color',
       };
 
       const output: CreateCategoryOutput = {
         id: '2',
-        icon_svg: 'svg',
+        icon_name: 'svg',
         title: 'title',
-        color: 'color',
+        icon_color: 'icon_color',
         created_at: new Date(),
         updated_at: new Date(),
       };
@@ -116,24 +116,24 @@ describe('CategoryPrismaRepository', () => {
       // Arrange
       const input: UpdateCategoryByIdInput = {
         id: '1',
-        icon_svg: 'svg',
+        icon_name: 'svg',
         title: 'title',
-        color: 'color',
+        icon_color: 'icon_color',
       };
 
       const output: UpdateCategoryByIdOutput = {
         id: '1',
-        icon_svg: 'svg',
+        icon_name: 'svg',
         title: 'title',
-        color: 'color',
+        icon_color: 'icon_color',
         created_at: new Date(),
         updated_at: new Date(),
       };
 
       const data = {
-        icon_svg: input.icon_svg,
+        icon_name: input.icon_name,
         title: input.title,
-        color: input.color,
+        icon_color: input.icon_color,
       };
 
       const where = {

@@ -43,9 +43,9 @@ model Transaction {
 
 model Category {
   id         String   @id @default(uuid())
-  icon_svg   String   @db.LongText
+  icon_name  String
   title      String
-  color      String
+  icon_color String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
