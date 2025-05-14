@@ -22,7 +22,7 @@ export class UserController {
           .json({ error: response.val.message });
       }
 
-      return res.status(200).json(response);
+      return res.status(200).json(response.val);
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'An unknown error occurred';
@@ -44,7 +44,7 @@ export class UserController {
         .json({ error: response.val.message });
     }
 
-    return res.status(201).json(response);
+    return res.status(201).json(response.val);
   }
 
   public async login(req: Request, res: Response): Promise<Response> {
@@ -61,7 +61,7 @@ export class UserController {
         .json({ error: response.val.message });
     }
 
-    return res.status(200).json(response);
+    return res.status(200).json(response.val);
   }
 
   // DESATUALIZADO

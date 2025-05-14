@@ -21,7 +21,7 @@ export class CategoryController {
         .json({ error: response.val.message });
     }
 
-    return res.status(200).json(response);
+    return res.status(200).json(response.val);
   }
 
   public async create(req: Request, res: Response): Promise<Response> {
@@ -39,7 +39,7 @@ export class CategoryController {
         .json({ error: response.val.message });
     }
 
-    return res.status(201).json(response);
+    return res.status(201).json(response.val);
   }
 
   public async update(req: Request, res: Response): Promise<Response> {
@@ -58,7 +58,7 @@ export class CategoryController {
         .json({ error: response.val.message });
     }
 
-    return res.status(200).json(response);
+    return res.status(200).json(response.val);
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
